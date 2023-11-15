@@ -99,7 +99,7 @@ export const LoginPage = () => {
                         />
                         <Form.Control
                           type="text"
-                          placeholder="Enter surname"
+                          placeholder="Enter surnames"
                           onChange={(e) => setSurname(e.target.value)}
                           required
                         />
