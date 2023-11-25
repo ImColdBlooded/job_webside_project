@@ -1,64 +1,65 @@
+// Header.jsx
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { UserProfile } from './userProfile';
+import { Navbar, Nav, NavDropdown, Container } from 'react-bootstrap';
+import { useUserContext } from '../ContextApi/userData';
+import { useNavigate } from 'react-router-dom';
 
 export const Header = () => {
+  const { isLogged, logOut } = useUserContext();
+  var navigate = useNavigate();
+
+  const handleLogout = () => {
+    logOut();
+    navigate('/');
+  };
+
   return (
     <header>
-      <nav className="navbar navbar-expand-sm navbar-light bg-white">
-        <div className="container">
-          <Link className="navbar-brand" to="#">
-            <img src="./images/logoEasyWork.jpg" alt="EasyWork" />
-          </Link>
-          <button
-            className="navbar-toggler d-lg-none"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#collapsibleNavId"
-            aria-controls="collapsibleNavId"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span className="navbar-toggler-icon"></span>
-          </button>
-          <div className="collapse navbar-collapse" id="collapsibleNavId">
-            <ul className="navbar-nav ml-auto">
-              <li className="nav-item">
-                <Link className="nav-link" to="">
+      <Navbar bg='light' expand='sm'>
+        <Container>
+          <Navbar.Brand as={Link} to='#'>
+            <img src='./images/logoEasyWork.jpg' alt='EasyWork' />
+          </Navbar.Brand>
+          <Navbar.Toggle aria-controls='navbar-nav' />
+          <Navbar.Collapse id='navbar-nav'>
+            <Nav className='ml-auto'>
+              <Nav.Item>
+                <Nav.Link as={Link} to='/search'>
+                  Wyszukiwarka
+                </Nav.Link>
+              </Nav.Item>
+              <Nav.Item>
+                <Nav.Link as={Link} to='/employer-profiles'>
                   Profile pracodawców
-                </Link>
-              </li>
-              <li className="nav-item dropdown">
-                <Link
-                  className="nav-link dropdown-toggle"
-                  to="#"
-                  id="dropdownId"
-                  data-bs-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                >
-                  Moja kariera
-                </Link>
-
-                <div className="dropdown-menu" aria-labelledby="dropdownId">
-                  <Link className="dropdown-item" to="#">
-                    Kreator CV
-                  </Link>
-                  <Link className="dropdown-item" to="#">
-                    Kalkulator wynagrodzeń
-                  </Link>
-                  <Link className="dropdown-item" to="#">
-                    Zarobki
-                  </Link>
-                </div>
-              </li>
-            </ul>
-          </div>
-          <nav class="nav justify-content-">
-            <a class="nav-link" href="login">Logowanie</a>
-          </nav>
-        </div>
-      </nav>
+                </Nav.Link>
+              </Nav.Item>
+              <NavDropdown title='Moja kariera' id='dropdownCareers'>
+                <NavDropdown.Item as={Link} to='/cv-creator'>
+                  Kreator CV
+                </NavDropdown.Item>
+                <NavDropdown.Item as={Link} to='/salary-calculator'>
+                  Kalkulator wynagrodzeń
+                </NavDropdown.Item>
+              </NavDropdown>
+              {isLogged ? (
+                <NavDropdown title='Moja kariera' id='dropdownId'>
+                  <NavDropdown.Item as={Link} to='/user-profile'>
+                    Profil użytkownika
+                  </NavDropdown.Item>
+                  <NavDropdown.Item onClick={handleLogout}>Wyloguj</NavDropdown.Item>
+                </NavDropdown>
+              ) : (
+                <Nav.Item className='ml-auto'>
+                  <Nav.Link as={Link} to='/login'>
+                    Logowanie
+                  </Nav.Link>
+                </Nav.Item>
+              )}
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
     </header>
   );
-}
+};

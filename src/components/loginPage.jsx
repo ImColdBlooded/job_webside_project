@@ -1,66 +1,110 @@
 import React, { useState } from 'react';
-import '../css/LoginPage.css';
 import axios from 'axios';
-import { Form, Button, Container, Row, Col, FormGroup, Nav, Alert } from 'react-bootstrap';
+import '../css/LoginPage.css';
+import { Form, Button, Container, Row, Col, FormGroup, Alert } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
+import { useUserContext } from '../ContextApi/userData';
 
 export const LoginPage = () => {
   const [WantLogin, setWantLogin] = useState(true);
-  const [name, setName] = useState('');
-  const [surname, setSurname] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [repeatPassword, setRepeatPassword] = useState('');
-  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
-  const [showErrorPassAlert, setShowErrorPassAlert] = useState(false);
+
+  // Logowanie
+  const [emailLog, setEmailLog] = useState('');
+  const [passwordLog, setPasswordLog] = useState('');
+
+  // Rejestracja
+  const [nameReg, setNameReg] = useState('');
+  const [surnameReg, setSurnameReg] = useState('');
+  const [emailReg, setEmailReg] = useState('');
+  const [passwordReg, setPasswordReg] = useState('');
+  const [repeatPasswordReg, setRepeatPasswordReg] = useState('');
+
+  // Alerty logowanie
+  const [showSuccessAlertLog, setshowSuccessAlertLog] = useState(false);
+  const [showErrorPassAlertLog, setShowErrorPassAlertLog] = useState(false);
+  const [showErrorUserExistLog, setShowErrorUserExistLog] = useState(false);
+
+  // Alerty rejestracja
+  const [showSuccessAlertReg, setShowSuccessAlertReg] = useState(false);
+  const [showErrorPassAlertReg, setShowErrorPassAlertReg] = useState(false);
+  const [showErrorUserExist, setShowErrorUserExist] = useState(false);
+
+  //logowanie dane użytkownika
+  const { loginUser } = useUserContext();
+
+  const navigate = useNavigate();
 
   const handleSubmit = async e => {
     e.preventDefault();
 
-    if (password !== repeatPassword) {
-      setShowSuccessAlert(false);
-      setShowErrorPassAlert(true);
+    if (passwordReg !== repeatPasswordReg) {
+      setShowErrorPassAlertReg(true);
     } else {
       if (WantLogin === false) {
-        // Kod rejestracji
-        const registerUrl = 'http://localhost/StronaZOfertamiPracy/addUser.php';
+        const registerUrl = 'http://localhost/StronaZOfertamiPracy/register.php';
 
         let UserData = new FormData();
-        UserData.append('name', name);
-        UserData.append('surname', surname);
-        UserData.append('email', email);
-        UserData.append('password', password);
-        UserData.append('repeatPassword', repeatPassword);
+        UserData.append('name', nameReg);
+        UserData.append('surname', surnameReg);
+        UserData.append('email', emailReg);
+        UserData.append('password', passwordReg);
+        UserData.append('repeatPassword', repeatPasswordReg);
 
         try {
-          await axios.post(registerUrl, UserData);
-          setShowErrorPassAlert(false);
-          setShowSuccessAlert(true);
+          const response = await axios.post(registerUrl, UserData);
+
+          if (response.data.success) {
+            setShowSuccessAlertReg(true);
+            setShowErrorUserExist(false);
+          } else if (response.data.errorExist) {
+            setShowErrorUserExist(true);
+            setShowSuccessAlertReg(false);
+          }
         } catch (error) {
-          console.error('Błąd rejestracji:', error);
+          console.error('Error during registration:', error);
         }
       } else {
-        // Kod logowania
         const loginUrl = 'http://localhost/StronaZOfertamiPracy/login.php';
 
         let UserData = new FormData();
-        UserData.append('email', email);
-        UserData.append('password', password);
+        UserData.append('email', emailLog);
+        UserData.append('password', passwordLog);
 
         try {
           const response = await axios.post(loginUrl, UserData);
 
-          if (response.data.success) {
-            setShowErrorPassAlert(false);
-            setShowSuccessAlert(true);
-          } else {
-            setShowSuccessAlert(false);
-            setShowErrorPassAlert(true);
+          if (response.data.successLog) {
+            setshowSuccessAlertLog(true);
+            setShowErrorPassAlertLog(false);
+            setShowErrorUserExistLog(false);
+            console.log('Próba logowania:', response.data.userData);
+
+            if (response.data.userData) {
+              loginUser({
+                imie: response.data.userData.imie,
+                email: response.data.userData.email,
+              });
+            }
+            handleLoginSuccess();
+          } else if (response.data.errorPass) {
+            setShowErrorPassAlertLog(true);
+            setshowSuccessAlertLog(false);
+            setShowErrorUserExistLog(false);
+          } else if (response.data.errorUser) {
+            setShowErrorUserExistLog(true);
+            setShowErrorPassAlertLog(false);
+            setshowSuccessAlertLog(false);
           }
         } catch (error) {
-          console.error('Błąd logowania:', error);
+          console.error('Error during login:', error);
         }
       }
     }
+  };
+
+  const handleLoginSuccess = () => {
+    setshowSuccessAlertLog(true);
+    navigate('/user-profile');
   };
 
   return (
@@ -79,13 +123,13 @@ export const LoginPage = () => {
                         <Form.Control
                           type='text'
                           placeholder='Enter name'
-                          onChange={e => setName(e.target.value)}
+                          onChange={e => setNameReg(e.target.value)}
                           required
                         />
                         <Form.Control
                           type='text'
                           placeholder='Enter surnames'
-                          onChange={e => setSurname(e.target.value)}
+                          onChange={e => setSurnameReg(e.target.value)}
                           required
                         />
                       </FormGroup>
@@ -95,13 +139,13 @@ export const LoginPage = () => {
                       <Form.Control
                         type='email'
                         placeholder='Enter email'
-                        onChange={e => setEmail(e.target.value)}
+                        onChange={e => (WantLogin ? setEmailLog(e.target.value) : setEmailReg(e.target.value))}
                         required
                       />
                       <Form.Control
                         type='password'
                         placeholder='Enter password'
-                        onChange={e => setPassword(e.target.value)}
+                        onChange={e => (WantLogin ? setPasswordLog(e.target.value) : setPasswordReg(e.target.value))}
                         required
                       />
 
@@ -110,7 +154,7 @@ export const LoginPage = () => {
                           <Form.Control
                             type='password'
                             placeholder='Repeat password'
-                            onChange={e => setRepeatPassword(e.target.value)}
+                            onChange={e => setRepeatPasswordReg(e.target.value)}
                             required
                           />
                         </FormGroup>
@@ -132,20 +176,55 @@ export const LoginPage = () => {
                   </Col>
                 </Row>
 
-                {showSuccessAlert && (
-                  <Row>
-                    <Alert variant='success' dismissible onClose={() => setShowSuccessAlert(false)}>
-                      {WantLogin ? 'Pomyślnie zalogowano!' : 'Pomyślnie zarejestrowano!'}
-                    </Alert>
-                  </Row>
-                )}
-
-                {showErrorPassAlert && (
-                  <Row>
-                    <Alert variant='danger' dismissible onClose={() => setShowErrorPassAlert(false)}>
-                      Powtórzone hasło nie jest takie samo jak główne!
-                    </Alert>
-                  </Row>
+                {WantLogin ? (
+                  <>
+                    {showSuccessAlertLog && (
+                      <Row>
+                        <Alert variant='success' dismissible onClose={() => setshowSuccessAlertLog(false)}>
+                          Pomyślnie zalogowano!
+                        </Alert>
+                      </Row>
+                    )}
+                    {showErrorPassAlertLog && (
+                      <Row>
+                        <Alert variant='danger' dismissible onClose={() => setShowErrorPassAlertLog(false)}>
+                          Niepoprawne hasło!
+                        </Alert>
+                      </Row>
+                    )}
+                    {showErrorUserExistLog && (
+                      <Row>
+                        <Alert variant='danger' dismissible onClose={() => setShowErrorUserExistLog(false)}>
+                          Użytkownik nie istnieje! Jeśli chcesz założyć konto{' '}
+                          <Alert.Link onClick={() => setWantLogin(!WantLogin)}>naciśnij tutaj</Alert.Link>
+                        </Alert>
+                      </Row>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    {showSuccessAlertReg && (
+                      <Row>
+                        <Alert variant='success' dismissible onClose={() => setShowSuccessAlertReg(false)}>
+                          Pomyślnie zarejestrowano!
+                        </Alert>
+                      </Row>
+                    )}
+                    {showErrorPassAlertReg && (
+                      <Row>
+                        <Alert variant='danger' dismissible onClose={() => setShowErrorPassAlertReg(false)}>
+                          Hasła nie są takie same!
+                        </Alert>
+                      </Row>
+                    )}
+                    {showErrorUserExist && (
+                      <Row>
+                        <Alert variant='danger' dismissible onClose={() => setShowErrorUserExist(false)}>
+                          Użytkownik już istnieje
+                        </Alert>
+                      </Row>
+                    )}
+                  </>
                 )}
               </Container>
             </Form>
