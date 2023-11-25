@@ -1,5 +1,6 @@
 // UserContext.js
 import { createContext, useContext, useState } from 'react';
+//https://www.youtube.com/watch?v=cwZXiUkBW1w -> korzystałem z tego filmu
 
 export const UserContext = createContext();
 
