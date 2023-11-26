@@ -1,13 +1,25 @@
 // Header.jsx
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Navbar, Nav, NavDropdown, Container } from 'react-bootstrap';
 import { useUserContext } from '../ContextApi/userData';
 import { useNavigate } from 'react-router-dom';
 
 export const Header = () => {
-  const { isLogged, logOut } = useUserContext();
+  const { isLogged, logOut, loginUser } = useUserContext();
   var navigate = useNavigate();
+
+  useEffect(() => {
+    const storedIsLogged = localStorage.getItem('isLogged');
+
+    if (storedIsLogged === 'true') {
+      const storedUserData = localStorage.getItem('UserData');
+
+      if (storedUserData) {
+        loginUser(JSON.parse(storedUserData));
+      }
+    }
+  }, [loginUser]);
 
   const handleLogout = () => {
     logOut();
@@ -43,7 +55,7 @@ export const Header = () => {
                 </NavDropdown.Item>
               </NavDropdown>
               {isLogged ? (
-                <NavDropdown title='Moja kariera' id='dropdownId'>
+                <NavDropdown title='Twoje konto' id='dropdownId'>
                   <NavDropdown.Item as={Link} to='/user-profile'>
                     Profil użytkownika
                   </NavDropdown.Item>

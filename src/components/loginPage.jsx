@@ -5,6 +5,8 @@ import { Form, Button, Container, Row, Col, FormGroup, Alert } from 'react-boots
 import { useNavigate } from 'react-router-dom';
 import { useUserContext } from '../ContextApi/userData';
 
+//local storage -> https://kursjs.pl/kurs/storage/storage 
+
 export const LoginPage = () => {
   const [WantLogin, setWantLogin] = useState(true);
 

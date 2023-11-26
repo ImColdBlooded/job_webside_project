@@ -1,8 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useUserContext } from '../ContextApi/userData';
 
 export const UserProfile = () => {
-  const { userData, isLogged } = useUserContext();
+  const { userData, isLogged, loginUser } = useUserContext();
+
+  useEffect(() => {
+    const storeData = localStorage.getItem('UserData');
+
+    if (storeData) {
+      loginUser(JSON.parse(storeData));
+    }
+  }, [loginUser]);
 
   return (
     <>
