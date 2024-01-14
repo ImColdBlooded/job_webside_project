@@ -15,11 +15,10 @@ export const UserProfile = () => {
   }, [loginUser]);
 
   function checkAdmin(userData) {
-    if (userData == '1') {
-      return <span>Admin</span>;
-    } else {
-      return <span>No admin</span>;
+    if (userData === '1') {
+      return <Button variant='secondary'>Go to AdminPage</Button>;
     }
+    return '';
   }
 
   return (
@@ -76,9 +75,7 @@ export const UserProfile = () => {
           </Row>
 
           <Row>
-            <Col md={6}>
-              <strong>Admin permission:</strong> {checkAdmin(userData.isAdmin)}
-            </Col>
+            <Col md={6}>{checkAdmin(userData.isAdmin)}</Col>
           </Row>
           <Row>
             <Stack gap={2} className='col-md-5 mx-auto'>
