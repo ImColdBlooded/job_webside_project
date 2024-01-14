@@ -5,7 +5,7 @@ import { Form, Button, Container, Row, Col, FormGroup, Alert } from 'react-boots
 import { useNavigate } from 'react-router-dom';
 import { useUserContext } from '../ContextApi/userData';
 
-//local storage -> https://kursjs.pl/kurs/storage/storage 
+//local storage -> https://kursjs.pl/kurs/storage/storage
 
 export const LoginPage = () => {
   const [WantLogin, setWantLogin] = useState(true);
@@ -83,8 +83,24 @@ export const LoginPage = () => {
 
             if (response.data.userData) {
               loginUser({
-                imie: response.data.userData.imie,
+                user_id: response.data.userData.user_id,
+                name: response.data.userData.name,
+                surname: response.data.userData.surname,
+                birth_date: response.data.userData.birth_date,
                 email: response.data.userData.email,
+                tel_number: response.data.userData.tel_number,
+                prof_image: response.data.userData.prof_image,
+                residence_place: response.data.userData.residence_place,
+                curr_position: response.data.userData.curr_position,
+                curr_position_description: response.data.userData.curr_position_description,
+                career_summary: response.data.userData.career_summary,
+                work_experience: response.data.userData.work_experience,
+                education: response.data.userData.education,
+                language_skills: response.data.userData.language_skills,
+                skills: response.data.userData.skills,
+                courses: response.data.userData.courses,
+                links: response.data.userData.links,
+                isAdmin: response.data.userData.isAdmin,
               });
             }
             handleLoginSuccess();

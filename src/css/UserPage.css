@@ -1,0 +1,14 @@
+:root {
+  --background-color: aquamarine;
+}
+
+.userDisplay {
+  background-color: var(--background-color);
+  padding: 30px;
+  border-radius: 15px;
+}
+
+.userDisplay > p {
+  font-size: 30px;
+  font-weight: bold;
+}
