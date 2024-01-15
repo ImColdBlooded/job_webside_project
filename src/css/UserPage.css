@@ -12,3 +12,9 @@
   font-size: 30px;
   font-weight: bold;
 }
+
+.adminDisplay {
+  background-color: var(--background-color);
+  padding: 30px;
+  border-radius: 15px;
+}

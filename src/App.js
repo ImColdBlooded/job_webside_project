@@ -3,9 +3,9 @@ import React from 'react';
 import { SearchBar } from './components/SearchBar';
 import { Header } from './components/header.jsx';
 import './css/App.css';
-import { UserProfile } from './components/userProfile.jsx';
+import { UserProfile } from './Pages/userProfile.jsx';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { LoginPage } from './components/loginPage';
+import { LoginPage } from './Pages/loginPage';
 import { UserProvider } from './ContextApi/userData.jsx';
 
 function App() {
