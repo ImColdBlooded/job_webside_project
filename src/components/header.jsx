@@ -30,7 +30,7 @@ export const Header = () => {
     <header>
       <Navbar bg='light' expand='sm'>
         <Container>
-          <Navbar.Brand as={Link} to='#'>
+          <Navbar.Brand as={Link} to='/main'>
             <img src='./images/logoEasyWork.jpg' alt='EasyWork' />
           </Navbar.Brand>
           <Navbar.Toggle aria-controls='navbar-nav' />
@@ -58,6 +58,9 @@ export const Header = () => {
                 <NavDropdown title='Twoje konto' id='dropdownId'>
                   <NavDropdown.Item as={Link} to='/user-profile'>
                     Profil użytkownika
+                  </NavDropdown.Item>
+                  <NavDropdown.Item as={Link} to='/add-notification'>
+                    Dodaj ogłoszenie
                   </NavDropdown.Item>
                   <NavDropdown.Item onClick={handleLogout}>Wyloguj</NavDropdown.Item>
                 </NavDropdown>

@@ -11,6 +11,12 @@ export const UserProfile = () => {
   //dane
   const [newName, setNewName] = useState(userData.name);
   const [newSurname, setNewSurname] = useState(userData.surname);
+  const [newEmail, setNewEmail] = useState(userData.email);
+  const [newBirthDate, setNewBirthDate] = useState(userData.birth_date);
+  const [newTelNumber, setNewTelNumber] = useState(userData.tel_number);
+  const [newResidencePlace, setResidencePlace] = useState(userData.residence_place);
+  const [newCurrentPosition, setNewCurrentPosition] = useState(userData.curr_position);
+  const [newCurrentPositionDescr, setNewCurrentPositionDescr] = useState(userData.curr_position_description);
 
   useEffect(() => {
     const storeData = localStorage.getItem('UserData');
@@ -29,12 +35,20 @@ export const UserProfile = () => {
         </Stack>
       );
     }
-    return '';
+    return 'false';
   }
 
+  function checkVisibility(userData) {
+    if (userData === '1') {
+      return { visibility: 'visible' };
+    }
+    return { visibility: 'hidden' };
+  }
   const handleChangeUserData = () => {
     setEditProfile(prevEditProfile => !prevEditProfile);
   };
+
+  const handleSaveChages = () => {};
 
   const handleChangeName = newName => {
     setNewName(newName);
@@ -42,6 +56,30 @@ export const UserProfile = () => {
 
   const handleChangeSurname = newSurname => {
     setNewSurname(newSurname);
+  };
+
+  const handleChangeEmail = newEmail => {
+    setNewEmail(newEmail);
+  };
+
+  const handleChangeBirthDate = newBirthDate => {
+    setNewBirthDate(newBirthDate);
+  };
+
+  const handleChangeTelNumber = newTelNumber => {
+    setNewTelNumber(newTelNumber);
+  };
+
+  const handleChangeResidencePlace = newResidencePlace => {
+    setResidencePlace(newResidencePlace);
+  };
+
+  const handleChangeCurrentPosition = newCurrentPosition => {
+    setNewCurrentPosition(newCurrentPosition);
+  };
+
+  const handleChangeCurrentPositionDescr = newCurrentPositionDescr => {
+    setNewCurrentPositionDescr(newCurrentPositionDescr);
   };
 
   return (
@@ -82,51 +120,131 @@ export const UserProfile = () => {
 
             <Row>
               <Col md={6}>
-                <strong>Email:</strong> {userData.email}
+                {editProfile ? (
+                  <span>
+                    <strong>Email:</strong>
+                    <input type='text' value={newEmail} onChange={e => handleChangeEmail(e.target.value)} />
+                  </span>
+                ) : (
+                  <span>
+                    <strong>Email:</strong> {userData.email}
+                  </span>
+                )}
               </Col>
             </Row>
 
             <Row>
               <Col md={6}>
-                <strong>Birth Date:</strong> {userData.birth_date}
+                {editProfile ? (
+                  <span>
+                    <strong>Birth Date:</strong>
+                    <input type='text' value={newBirthDate} onChange={e => handleChangeBirthDate(e.target.value)} />
+                  </span>
+                ) : (
+                  <span>
+                    <strong>Birth Date:</strong> {userData.birth_date}
+                  </span>
+                )}
               </Col>
             </Row>
 
             <Row>
               <Col md={6}>
-                <strong>Phone Number:</strong> {userData.tel_number}
+                {editProfile ? (
+                  <span>
+                    <strong>Phone Number:</strong>
+                    <input type='text' value={newTelNumber} onChange={e => handleChangeTelNumber(e.target.value)} />
+                  </span>
+                ) : (
+                  <span>
+                    <strong>Phone Number:</strong> {userData.tel_number}
+                  </span>
+                )}
               </Col>
             </Row>
 
             <Row>
               <Col md={6}>
-                <strong>Residence Place:</strong> {userData.residence_place}
+                {editProfile ? (
+                  <span>
+                    <strong>Residence Place:</strong>
+                    <input
+                      type='text'
+                      value={newResidencePlace}
+                      onChange={e => handleChangeResidencePlace(e.target.value)}
+                    />
+                  </span>
+                ) : (
+                  <span>
+                    <strong>Residence Place:</strong> {userData.residence_place}
+                  </span>
+                )}
               </Col>
             </Row>
 
             <Row>
               <Col md={6}>
-                <strong>Current Position:</strong> {userData.curr_position}
+                {editProfile ? (
+                  <span>
+                    <strong>Current Position:</strong>
+                    <input
+                      type='text'
+                      value={newCurrentPosition}
+                      onChange={e => handleChangeCurrentPosition(e.target.value)}
+                    />
+                  </span>
+                ) : (
+                  <span>
+                    <strong>Current Position:</strong> {userData.curr_position}
+                  </span>
+                )}
               </Col>
             </Row>
 
             <Row>
               <Col md={6}>
-                <strong>Current Position Description:</strong> {userData.curr_position_description}
+                {editProfile ? (
+                  <span>
+                    <strong>Current Position Description:</strong>
+                    <br></br>
+                    <textarea
+                      cols={50}
+                      rows={10}
+                      value={newCurrentPositionDescr}
+                      onChange={e => handleChangeCurrentPositionDescr(e.target.value)}
+                    />
+                  </span>
+                ) : (
+                  <span>
+                    <strong>Current Position Description:</strong> {userData.curr_position_description}
+                  </span>
+                )}
               </Col>
             </Row>
 
             <Row>
               <Stack gap={2} className='col-md-5 mx-auto'>
-                <Button variant='secondary' onClick={() => handleChangeUserData(false)}>
-                  Change Data
-                </Button>
-                <Button variant='secondary'>Add Notofication</Button>
+                {editProfile ? (
+                  <>
+                    <Button variant='primary' onClick={handleSaveChages}>
+                      Save Changes
+                    </Button>
+                    <Button variant='danger' onClick={() => handleChangeUserData(true)}>
+                      Cancel
+                    </Button>
+                  </>
+                ) : (
+                  <Button variant='secondary' onClick={() => handleChangeUserData(false)}>
+                    Change Data
+                  </Button>
+                )}
               </Stack>
             </Row>
           </Container>
           <br />
-          <Container className='adminDisplay'>{checkAdmin(userData.isAdmin)}</Container>
+          <Container className='adminDisplay' style={checkVisibility(userData.isAdmin)}>
+            {checkAdmin(userData.isAdmin)}
+          </Container>
         </Container>
       ) : (
         <p>Nie jesteś zalogowany.</p>
