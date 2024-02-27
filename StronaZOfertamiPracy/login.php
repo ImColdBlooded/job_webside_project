@@ -29,16 +29,9 @@ if ($conn->connect_error) {
                 'email' => $row['email'],
                 'tel_number' => $row['tel_number'],
                 'prof_image' => $row['prof_image'],
-                'residence_place' => $row['residence_place'],
                 'curr_position' => $row['curr_position'],
                 'curr_position_description' => $row['curr_position_description'],
                 'career_summary' => $row['career_summary'],
-                'work_experience' => $row['work_experience'],
-                'education' => $row['education'],
-                'language_skills' => $row['language_skills'],
-                'skills' => $row['skills'],
-                'courses' => $row['courses'],
-                'links' => $row['links'],
                 'isAdmin' => $row['isAdmin'],
             )));
             exit();

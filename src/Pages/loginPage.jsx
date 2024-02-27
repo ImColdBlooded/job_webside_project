@@ -55,7 +55,7 @@ export const LoginPage = () => {
         try {
           const response = await axios.post(registerUrl, UserData);
 
-          if (response.data.success) {
+          if (response.data.successReg) {
             setShowSuccessAlertReg(true);
             setShowErrorUserExist(false);
           } else if (response.data.errorExist) {
@@ -79,7 +79,6 @@ export const LoginPage = () => {
             setshowSuccessAlertLog(true);
             setShowErrorPassAlertLog(false);
             setShowErrorUserExistLog(false);
-            console.log('Próba logowania:', response.data.userData);
 
             if (response.data.userData) {
               loginUser({
@@ -90,16 +89,9 @@ export const LoginPage = () => {
                 email: response.data.userData.email,
                 tel_number: response.data.userData.tel_number,
                 prof_image: response.data.userData.prof_image,
-                residence_place: response.data.userData.residence_place,
                 curr_position: response.data.userData.curr_position,
                 curr_position_description: response.data.userData.curr_position_description,
                 career_summary: response.data.userData.career_summary,
-                work_experience: response.data.userData.work_experience,
-                education: response.data.userData.education,
-                language_skills: response.data.userData.language_skills,
-                skills: response.data.userData.skills,
-                courses: response.data.userData.courses,
-                links: response.data.userData.links,
                 isAdmin: response.data.userData.isAdmin,
               });
             }
@@ -108,10 +100,12 @@ export const LoginPage = () => {
             setShowErrorPassAlertLog(true);
             setshowSuccessAlertLog(false);
             setShowErrorUserExistLog(false);
+            console.log('Error pass');
           } else if (response.data.errorUser) {
             setShowErrorUserExistLog(true);
             setShowErrorPassAlertLog(false);
             setshowSuccessAlertLog(false);
+            console.log('Error user');
           }
         } catch (error) {
           console.error('Error during login:', error);

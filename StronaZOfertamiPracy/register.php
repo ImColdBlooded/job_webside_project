@@ -22,9 +22,9 @@ if ($conn->connect_error) {
     } else {
         $password_hash = password_hash($password, PASSWORD_DEFAULT);
 
-        $query = "INSERT INTO `users` (`user_id`, `name`, `surname`, `birth_date`, `email`, `tel_number`, `residence_place`, `curr_position`, `curr_position_description`, `career_summary`, `work_experience`, `education`, `language_skills`, `skills`, `courses`, `password_hash`, `links`) 
-        VALUES (NULL, '$name', '$surname', NULL, '$email', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$password_hash', NULL)";
-
+        $query = "INSERT INTO `users` (`user_id`, `name`, `surname`, `birth_date`, `email`, `tel_number`, `curr_position`, `curr_position_description`, `career_summary`, `password_hash`) 
+        VALUES (NULL, '$name', '$surname', NULL, '$email', NULL, NULL, NULL, NULL,'$password_hash')";
+        
         if ($conn->query($query)) {
             echo json_encode(array("successReg" => "User registered successfully"));
         } else {

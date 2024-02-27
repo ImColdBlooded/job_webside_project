@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Accordion, Card, Button } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 
 export const AdminControls = () => {
   const [users, setUsers] = useState([]); //stan przechowujący nam tablice z użytkownikami
+  const navigate = useNavigate();
 
   const getAllUsersUrl = 'http://localhost/StronaZOfertamiPracy/getAllUsers.php';
 
@@ -12,6 +14,10 @@ export const AdminControls = () => {
       .then(data => setUsers(data.usersData)) //dodanie listy użytkowników do stanu users
       .catch(error => console.error('Error fetching users:', error));
   }, []);
+
+  const handleGoToUserPage = userId => {
+    navigate(`/user-profile/${userId}`);
+  };
 
   const handleDeleteUser = userId => {
     const deleteUserUrl = `http://localhost/StronaZOfertamiPracy/deleteUserFromDatabase.php?user_id=${userId}`;
@@ -73,6 +79,9 @@ export const AdminControls = () => {
                   </Button>
                   <Button variant='primary' onClick={() => handleToggleAdminPermission(user.user_id, user.isAdmin)}>
                     Zmień permisje administratorskie
+                  </Button>
+                  <Button variant='primary' onClick={() => handleGoToUserPage(user.user_id)}>
+                    Przejdz do strony użytkownika
                   </Button>
                 </Card.Body>
               ))}
