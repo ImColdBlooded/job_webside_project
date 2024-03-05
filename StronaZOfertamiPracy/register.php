@@ -24,7 +24,7 @@ if ($conn->connect_error) {
 
         $query = "INSERT INTO `users` (`user_id`, `name`, `surname`, `birth_date`, `email`, `tel_number`, `curr_position`, `curr_position_description`, `career_summary`, `password_hash`) 
         VALUES (NULL, '$name', '$surname', NULL, '$email', NULL, NULL, NULL, NULL,'$password_hash')";
-        
+
         if ($conn->query($query)) {
             echo json_encode(array("successReg" => "User registered successfully"));
         } else {
