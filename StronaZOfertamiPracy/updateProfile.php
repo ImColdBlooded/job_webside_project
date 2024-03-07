@@ -49,7 +49,7 @@ if($conn->connect_error){
     
     // skills
     foreach ($skillsList as $skill) {
-        /*$checkSkillQuery = "SELECT skills_id FROM skills WHERE skill_name = '$skill'";
+        $checkSkillQuery = "SELECT skills_id FROM skills WHERE skill_name = '$skill'";
         $result = $conn->query($checkSkillQuery);
     
         if ($result->num_rows > 0) {
