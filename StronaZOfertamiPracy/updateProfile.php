@@ -24,7 +24,7 @@ if($conn->connect_error){
     $educationList = json_decode($_POST['educationList'], true);
     $languageList = json_decode($_POST['languageList'], true);
     $skillsList = json_decode($_POST['skillsList'], true);
-    var_dump($workExperienceList);
+
 
     $courseList = json_decode($_POST['courseList'], true);
     $linkList = json_decode($_POST['linkList'], true);
@@ -46,24 +46,25 @@ if($conn->connect_error){
     }else{
         echo json_encode(array("error" => 'User update error: ' . $conn->error));
     }
-    
-    // skills
+
     foreach ($skillsList as $skill) {
-        $checkSkillQuery = "SELECT skills_id FROM skills WHERE skill_name = '$skill'";
+        $skilll = $skill['skillName'];
+
+        $checkSkillQuery = "SELECT skills_id FROM skills WHERE skill_name = '$skilll'";
         $result = $conn->query($checkSkillQuery);
     
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
             $skills_id = $row['skills_id'];
         } else {
-            $insertSkillQuery = "INSERT INTO skills (skill_name) VALUES ('$skill')";
+            $insertSkillQuery = "INSERT INTO skills (skill_name) VALUES ('$skilll')";
             $conn->query($insertSkillQuery);
     
             $skills_id = $conn->insert_id;
         }
 
         $insertUserSkillQuery = "INSERT INTO user_skills (user_id, skills_id) VALUES ($user_id, $skills_id)";
-        $conn->query($insertUserSkillQuery);*/
+        $conn->query($insertUserSkillQuery);
     }
 
     

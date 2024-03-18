@@ -235,6 +235,7 @@ export const EditProfileForm = () => {
     try {
       const response = await axios.post(updateUserUrl, userUpdateData);
       console.log(skillsList);
+      console.log(JSON.stringify(skillsList));
 
       if (response.data.success) {
         console.log('sukces');
