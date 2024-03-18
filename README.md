@@ -63,8 +63,4 @@ We welcome contributions to the project! If you'd like to contribute, please fol
 
 The project is licensed under the MIT License. See the LICENSE file for more information.
 
-## Contact
-
-If you have any questions or feedback, please contact us at jobwebsite@example.com.
-
 Happy job hunting! 😊
