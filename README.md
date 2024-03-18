@@ -8,7 +8,7 @@ To get started with the project, follow these steps:
 
 1. Clone the repository:
     ```bash
-    git clone https://github.com/your-username/job_website_project.git
+    git clone https://github.com/SouthKioto/job_website_project.git
     ```
 
 2. Install dependencies:
