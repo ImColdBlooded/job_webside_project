@@ -45,9 +45,6 @@ The project was built using the following technologies:
 - React
 - Bootstrap
 - Node.js
-- Express.js
-- MongoDB
-- Passport.js
 
 ## Contributing
 
