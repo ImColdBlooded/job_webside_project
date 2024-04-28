@@ -247,6 +247,10 @@ export const EditProfileForm = () => {
     }
   };
 
+  const cleanForm = () => {
+    setSkillsList = [];
+  };
+
   return (
     <Container className='userDisplay'>
       <h1>Formularz update Profile</h1>

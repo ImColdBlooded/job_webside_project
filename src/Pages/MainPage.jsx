@@ -1,12 +1,13 @@
 import React from 'react';
-import { DisplayNotoficationByCategory } from '../components/DisplayNotoficationByCategory';
+import { Form, Button, Container, Row, Col, Accordion } from 'react-bootstrap';
+import { DisplayNotificationByCategory } from '../components/DisplayNotificationByCategory';
 
 export const MainPage = () => {
-  const category = 'programowanie';
   return (
     <>
-      <h1>Main Page</h1>
-      <DisplayNotoficationByCategory category={category} />
+      <Container>
+        <DisplayNotificationByCategory category={'Programowanie'} />
+      </Container>
     </>
   );
 };
