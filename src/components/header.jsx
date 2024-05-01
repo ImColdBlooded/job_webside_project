@@ -1,4 +1,3 @@
-// Header.jsx
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Navbar, Nav, NavDropdown, Container } from 'react-bootstrap';
@@ -19,7 +18,7 @@ export const Header = () => {
         loginUser(JSON.parse(storedUserData));
       }
     }
-  }, [loginUser]);
+  }, []);
 
   const handleLogout = () => {
     logOut();
@@ -28,7 +27,7 @@ export const Header = () => {
 
   return (
     <header>
-      <Navbar bg='light' expand='sm'>
+      <Navbar bg='light' expand='md'>
         <Container>
           <Navbar.Brand as={Link} to='/main'>
             <img src='./images/logoEasyWork.jpg' alt='EasyWork' />

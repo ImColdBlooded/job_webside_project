@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Carousel, Card, Button } from 'react-bootstrap';
 
 export const DisplayNotificationByCategory = ({ category }) => {
   const [notifications, setNotifications] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const getNotificationsUrl = 'http://localhost/StronaZOfertamiPracy/getNotificationByCategory.php';
 
   useEffect(() => {
     const formData = new URLSearchParams();
     formData.append('not_category', category);
-
-    //nah w tym miejscu mi się odechciało ~w~
 
     axios
       .post(getNotificationsUrl, formData)
@@ -19,37 +19,50 @@ export const DisplayNotificationByCategory = ({ category }) => {
           console.log('Błąd: Brak danych');
         } else {
           const notificationsData = response.data.notificationData;
-          console.log(notificationsData);
           setNotifications(notificationsData);
         }
       })
       .catch(error => {
         console.log('Błąd pobierania danych: ', error);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, [category]);
 
-  /*return (
-    <>
-      <h2>Prace z kategorii: {category}</h2>
-      {notifications.length > 0 ? (
-        <div>
-          {notifications.map(notification => (
-            <div key={notification.notification_of_work_id}>
-              <h3>{notification.notification_title}</h3>
-              <p>{notification.notification_descript}</p>
-            </div>
-          ))}
-        </div>
-      ) : (
-        //<p>Brak danych do wyświetlenia</p>;
+  useEffect(() => {
+    console.log('Aktualizacja stanu notifications:', notifications);
+  }, [notifications]);
 
-        {notifications.map(notification => (
-          <div key={notification.notification_of_work_id}>
-            <h3>{notification.notification_title}</h3>
-            <p>{notification.notification_descript}</p>
-          </div>
-        ))}
+  return (
+    <div style={{ background: 'white', borderRadius: '20px', padding: '20px', marginBottom: '10px' }}>
+      <strong style={{ fontSize: '25px' }}>Najnowsze zlecenia z kategorii: {category}</strong>
+      {loading ? (
+        <p>Trwa ładowanie danych...</p>
+      ) : notifications.length > 0 ? (
+        <Carousel>
+          {notifications.map(notification => (
+            <Carousel.Item>
+              <Card style={{ width: '100%' }}>
+                <Card.Body key={notification.notification_of_work_id}>
+                  <Card.Title>
+                    <strong>{notification.notification_title}</strong>
+                  </Card.Title>
+                  <Card.Text>
+                    {notification.notification_descript.length > 5
+                      ? `${notification.notification_descript.substring(0, 63)}...`
+                      : notification.notification_descript}
+                  </Card.Text>
+
+                  <Button variant='primary'>Przejdz do strony</Button>
+                </Card.Body>
+              </Card>
+            </Carousel.Item>
+          ))}
+        </Carousel>
+      ) : (
+        <p>Brak danych do wyświetlenia</p>
       )}
-    </>
-  );*/
+    </div>
+  );
 };
