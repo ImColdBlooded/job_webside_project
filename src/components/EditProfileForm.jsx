@@ -253,7 +253,6 @@ export const EditProfileForm = () => {
 
   return (
     <Container className='userDisplay'>
-      <h1>Formularz update Profile</h1>
       <Row>
         <Col>
           <Form

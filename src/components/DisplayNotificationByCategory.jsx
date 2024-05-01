@@ -42,19 +42,25 @@ export const DisplayNotificationByCategory = ({ category }) => {
       ) : notifications.length > 0 ? (
         <Carousel>
           {notifications.map(notification => (
-            <Carousel.Item>
+            <Carousel.Item key={notification.notification_of_work_id}>
               <Card style={{ width: '100%' }}>
-                <Card.Body key={notification.notification_of_work_id}>
+                <Card.Body>
                   <Card.Title>
                     <strong>{notification.notification_title}</strong>
                   </Card.Title>
                   <Card.Text>
-                    {notification.notification_descript.length > 5
-                      ? `${notification.notification_descript.substring(0, 63)}...`
-                      : notification.notification_descript}
+                    <p>
+                      {notification.notification_descript.length > 5
+                        ? `${notification.notification_descript.substring(0, 63)}...`
+                        : notification.notification_descript}
+                    </p>
+                    <p>
+                      Wynagrodzenie: {notification.salary_range_start} zł - {notification.salary_range_end} zł
+                    </p>
+                    <p>Typ umowy: {notification.contract_type}</p>
                   </Card.Text>
 
-                  <Button variant='primary'>Przejdz do strony</Button>
+                  <Button variant='primary'>Przejdź do strony</Button>
                 </Card.Body>
               </Card>
             </Carousel.Item>
