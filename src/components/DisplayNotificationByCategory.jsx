@@ -19,6 +19,7 @@ export const DisplayNotificationByCategory = ({ category }) => {
           console.log('Błąd: Brak danych');
         } else {
           const notificationsData = response.data.notificationData;
+          console.log(notificationsData);
           setNotifications(notificationsData);
         }
       })
@@ -27,7 +28,7 @@ export const DisplayNotificationByCategory = ({ category }) => {
       });
   }, [category]);
 
-  return (
+  /*return (
     <>
       <h2>Prace z kategorii: {category}</h2>
       {notifications.length > 0 ? (
@@ -50,5 +51,5 @@ export const DisplayNotificationByCategory = ({ category }) => {
         ))}
       )}
     </>
-  );
+  );*/
 };
