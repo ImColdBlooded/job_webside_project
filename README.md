@@ -27,6 +27,13 @@ To get started with the project, follow these steps:
     http://localhost:3000
     ```
 
+## Additional Resources
+
+If you need additional resources, you can also check out the repository for StronaZOfertamiPracy:
+[StronaZOfertamiPracy Repository](https://github.com/SouthKioto/StronaZOfertamiPracy)
+
+You'll need to download the files from there and add them to the `htdocs` folder.
+
 ## Features
 
 The website includes the following features:
