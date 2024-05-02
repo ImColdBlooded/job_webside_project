@@ -6,7 +6,6 @@ export const AddNotificationPage = () => {
   const { userData, isLogged, loginUser } = useUserContext();
   return (
     <>
-      <h1>Add a Notification</h1>
       <AddNotification />
     </>
   );

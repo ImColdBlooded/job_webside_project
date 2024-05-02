@@ -21,7 +21,9 @@ export const MainPage = () => {
           <Col>
             <DisplayNotificationByCategory category={'BlackHumansSlavery'} />
           </Col>
+        </Row>
 
+        <Row>
           <Col>
             <DisplayNotificationByCategory category={'Programowanie'} />
           </Col>
