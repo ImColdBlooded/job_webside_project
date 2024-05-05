@@ -7,6 +7,7 @@ import { LoginPage } from './Pages/loginPage';
 import { MainPage } from './Pages/MainPage';
 import { UserProvider } from './ContextApi/userData.jsx';
 import { AddNotificationPage } from './Pages/AddNotificationPage.jsx';
+import { AddCompanyPage } from './Pages/AddCompanyPage.jsx';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
             <Route path='/login' element={<LoginPage />} />
             <Route path='/user-profile' element={<UserProfile />} />
             <Route path='/add-notification' element={<AddNotificationPage />} />
+            <Route path='/add-company' element={<AddCompanyPage />} />
           </Routes>
         </UserProvider>
       </Router>

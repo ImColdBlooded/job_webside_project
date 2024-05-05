@@ -61,6 +61,9 @@ export const Header = () => {
                   <NavDropdown.Item as={Link} to='/add-notification'>
                     Dodaj ogłoszenie
                   </NavDropdown.Item>
+                  <NavDropdown.Item as={Link} to='/add-company'>
+                    Zarejestruj firme
+                  </NavDropdown.Item>
                   <NavDropdown.Item onClick={handleLogout}>Wyloguj</NavDropdown.Item>
                 </NavDropdown>
               ) : (
