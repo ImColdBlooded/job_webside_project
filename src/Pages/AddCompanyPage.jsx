@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
+import { AddCompanyForm } from '../components/AddCompanyForm';
 
 export const AddCompanyPage = () => {
   return (
     <>
-      <h1>Company page</h1>
+      <AddCompanyForm />
     </>
   );
 };

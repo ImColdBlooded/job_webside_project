@@ -34,6 +34,10 @@ export const DisplayNotificationByCategory = ({ category }) => {
     console.log('Aktualizacja stanu notifications:', notifications);
   }, [notifications]);
 
+  /*const goTonotificationPage = path => {
+    this.props.history.push(path);
+  };*/
+
   return (
     <div style={{ background: 'white', borderRadius: '20px', padding: '20px', marginBottom: '10px' }}>
       <strong style={{ fontSize: '25px' }}>Najnowsze zlecenia z kategorii: {category}</strong>
@@ -60,7 +64,9 @@ export const DisplayNotificationByCategory = ({ category }) => {
                     <p>Typ umowy: {notification.contract_type}</p>
                   </Card.Text>
 
-                  <Button variant='primary'>Przejdź do strony</Button>
+                  <Button variant='primary' style={{ marginLeft: '70%', marginBottom: '5px' }}>
+                    Przejdź do strony
+                  </Button>
                 </Card.Body>
               </Card>
             </Carousel.Item>

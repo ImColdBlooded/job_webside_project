@@ -28,6 +28,12 @@ export const MainPage = () => {
             <DisplayNotificationByCategory category={'Programowanie'} />
           </Col>
         </Row>
+
+        <Row>
+          <Col>
+            <DisplayNotificationByCategory category={'Sex'} />
+          </Col>
+        </Row>
       </Container>
     </>
   );

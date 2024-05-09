@@ -247,10 +247,6 @@ export const EditProfileForm = () => {
     }
   };
 
-  const cleanForm = () => {
-    setSkillsList = [];
-  };
-
   return (
     <Container className='userDisplay'>
       <Row>

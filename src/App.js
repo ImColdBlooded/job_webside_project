@@ -8,6 +8,7 @@ import { MainPage } from './Pages/MainPage';
 import { UserProvider } from './ContextApi/userData.jsx';
 import { AddNotificationPage } from './Pages/AddNotificationPage.jsx';
 import { AddCompanyPage } from './Pages/AddCompanyPage.jsx';
+import { SearchPage } from './Pages/SearchPage.jsx';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
             <Route path='/user-profile' element={<UserProfile />} />
             <Route path='/add-notification' element={<AddNotificationPage />} />
             <Route path='/add-company' element={<AddCompanyPage />} />
+            <Route path='/search' element={<SearchPage />} />
           </Routes>
         </UserProvider>
       </Router>

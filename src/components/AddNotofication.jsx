@@ -111,7 +111,7 @@ export const AddNotification = () => {
     NotificationData.append('responsibilities', newResponsibilities);
     NotificationData.append('candidate_requirements', newCandidateRequirements);
     NotificationData.append('employerOffers', newEmployerOffers);
-    NotificationData.append('category_list', newCategoryList);
+    NotificationData.append('category_list', JSON.stringify(selectedCategories));
     NotificationData.append('userId', newUserId);
 
     try {
