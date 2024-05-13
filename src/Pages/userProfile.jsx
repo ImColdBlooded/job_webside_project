@@ -28,7 +28,7 @@ export const UserProfile = () => {
     }
     return { visibility: 'hidden' };
   }
-  
+
   const handleChangeUserData = () => {
     setEditProfile(prevEditProfile => !prevEditProfile);
   };

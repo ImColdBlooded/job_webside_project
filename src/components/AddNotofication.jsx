@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Button, Container, Row } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+import { Form, Button, Container, Row, Alert, Col } from 'react-bootstrap';
 import { useUserContext } from '../ContextApi/userData';
 import axios from 'axios';
 
@@ -36,8 +37,14 @@ export const AddNotification = () => {
 
   const [newCompaniesList, setNewCompaniesList] = useState([]);
   const [newCategoryList, setNewCategoryList] = useState([]);
+  const [newTypeOfWorkList, setNewTypeOfWorkList] = useState([]);
+  const [newWorkingDaysList, setNewWorkingDaysList] = useState([]);
 
   const [selectedCategories, setSelectedCategories] = useState([]);
+
+  const [alertData, setAlertData] = useState({ show: false, variant: 'success', message: '' });
+
+  const [categoryAddOrSelect, setCategoryAddOrSelect] = useState(false);
 
   const handleCategoryChange = e => {
     const selectedOptions = Array.from(e.target.selectedOptions, option => option.value);
@@ -72,6 +79,37 @@ export const AddNotification = () => {
     }
   };
 
+  const [categoryAdd, setCategoryAdd] = useState('');
+
+  const handleAddCategory = async e => {
+    e.preventDefault();
+
+    const newCategory_url = 'http://localhost/stronaZOfertamiPracy/addCategory.php';
+
+    let NewCategory = new FormData();
+    NewCategory.append('newCategory', categoryAdd);
+
+    try {
+      const response = await axios.post(newCategory_url, NewCategory);
+
+      if (response.data.status === 'success') {
+        setAlertData({
+          show: true,
+          variant: 'success',
+          message: response.data.message,
+        });
+      } else if (response.data.status === 'error') {
+        setAlertData({
+          show: true,
+          variant: 'danger',
+          message: response.data.message,
+        });
+      }
+    } catch (error) {
+      console.error('Error during adding category', error);
+    }
+  };
+
   const companies_url = 'http://localhost/stronaZOfertamiPracy/getAllCompanies.php';
   useEffect(() => {
     fetch(companies_url)
@@ -88,10 +126,24 @@ export const AddNotification = () => {
       .catch(error => console.error('Cannot fetch category data', error));
   }, []);
 
-  const handleSubmit = async e => {
-    e.preventDefault();
+  const typeOfWork_url = 'http://localhost/stronaZOfertamiPracy/getAllTypeOfWork.php';
+  useEffect(() => {
+    fetch(typeOfWork_url)
+      .then(response => response.json())
+      .then(data => setNewTypeOfWorkList(data.typeOfWorkData))
+      .catch(error => console.error('Cannot fetch category data', error));
+  }, []);
 
-    console.log(selectedCategories);
+  const workingDays_url = 'http://localhost/stronaZOfertamiPracy/getAllWorkingDays.php';
+  useEffect(() => {
+    fetch(workingDays_url)
+      .then(response => response.json())
+      .then(data => setNewWorkingDaysList(data.daysData))
+      .catch(error => console.error('Cannot fetch category data', error));
+  }, []);
+
+  const handleSubmit = async e => {
+    //console.log(selectedCategories);
 
     const addNotificationUrl = 'http://localhost/stronaZOfertamiPracy/addNotificationtodatabase.php';
 
@@ -109,16 +161,28 @@ export const AddNotification = () => {
     NotificationData.append('workingHours_end', newWorkingHoursEnd);
     NotificationData.append('dateOfExpiry', newDateOfExpiry);
     NotificationData.append('responsibilities', newResponsibilities);
-    NotificationData.append('candidate_requirements', newCandidateRequirements);
+    NotificationData.append('candidateRequirements', newCandidateRequirements);
     NotificationData.append('employerOffers', newEmployerOffers);
     NotificationData.append('category_list', JSON.stringify(selectedCategories));
+    NotificationData.append('workType_list', JSON.stringify(selectedWorkType));
+    NotificationData.append('workDays_list', JSON.stringify(selectedDays));
     NotificationData.append('userId', newUserId);
 
     try {
       const response = await axios.post(addNotificationUrl, NotificationData);
 
-      if (response.data.success) {
-      } else if (response.data.error) {
+      if (response.data.status === 'success') {
+        setAlertData({
+          show: true,
+          variant: 'success',
+          message: response.data.message,
+        });
+      } else if (response.data.status === 'error') {
+        setAlertData({
+          show: true,
+          variant: 'danger',
+          message: response.data.message,
+        });
       }
     } catch (error) {
       console.error('Error during adding notification', error);
@@ -128,6 +192,12 @@ export const AddNotification = () => {
   return (
     <>
       <Container className='bg-light' style={{ padding: '50px', borderRadius: '20px' }} onSubmit={handleSubmit}>
+        {alertData.show && (
+          <Alert variant={alertData.variant} onClose={() => setAlertData({ ...alertData, show: false })} dismissible>
+            <Alert.Heading>{alertData.variant === 'success' ? 'Success!' : 'Error!'}</Alert.Heading>
+            <p>{alertData.message}</p>
+          </Alert>
+        )}
         <Form>
           <Form.Group className='mb-3'>
             <Form.Label>Tytuł</Form.Label>
@@ -143,7 +213,8 @@ export const AddNotification = () => {
             <Form.Label>
               Firma{' '}
               <span style={{ fontSize: '10px' }}>
-                (jeśli nie ma na liście twojej firmy proszę przejść do formularza dodawania firmy)
+                (jeśli nie możesz znaleźć swojej firmy możesz skorzystać z{' '}
+                <a href='http://localhost:3000/add-company'>formularza dodawania firmy</a> )
               </span>
             </Form.Label>
             <Form.Control as='select' onChange={handleCompanyChange} value={selectedCompany} required>
@@ -178,9 +249,15 @@ export const AddNotification = () => {
 
           <Form.Group className='mb-3'>
             <Form.Label>Rodzaj pracy</Form.Label>
-            <Form.Check type='checkbox' label='Zdalna' value='Zdalna' onChange={handleWorkTypeChange} />
-            <Form.Check type='checkbox' label='Hybrydowa' value='Hybrydowa' onChange={handleWorkTypeChange} />
-            <Form.Check type='checkbox' label='Stacjonarna' value='Stacjonarna' onChange={handleWorkTypeChange} />
+            {newTypeOfWorkList.map(workList => (
+              <Form.Check
+                key={workList.TypeOfWorkId}
+                type='checkbox'
+                label={workList.TypeOfWorkType}
+                value={workList.TypeOfWorkId}
+                onChange={handleWorkTypeChange}
+              />
+            ))}
           </Form.Group>
 
           <Form.Group className='mb-3'>
@@ -208,12 +285,15 @@ export const AddNotification = () => {
 
           <Form.Group className='mb-3'>
             <Form.Label>Dni pracy</Form.Label>
-            <Form.Check type='checkbox' label='Poniedziałek' value='Poniedziałek' onChange={handleDayChange} />
-            <Form.Check type='checkbox' label='Wtorek' value='Wtorek' onChange={handleDayChange} />
-            <Form.Check type='checkbox' label='Środa' value='Środa' onChange={handleDayChange} />
-            <Form.Check type='checkbox' label='Czwartek' value='Czwartek' onChange={handleDayChange} />
-            <Form.Check type='checkbox' label='Piątek' value='Piątek' onChange={handleDayChange} />
-            <Form.Check type='checkbox' label='Sobota' value='Sobota' onChange={handleDayChange} />
+            {newWorkingDaysList.map(days => (
+              <Form.Check
+                type='checkbox'
+                key={days.workingDayId}
+                label={days.dayName}
+                value={days.workingDayId}
+                onChange={handleDayChange}
+              />
+            ))}
           </Form.Group>
 
           <Form.Group className='mb-3'>
@@ -249,14 +329,33 @@ export const AddNotification = () => {
 
           <Form.Group className='mb-3'>
             <Form.Label>Kategorie</Form.Label>
-            <Form.Select multiple onChange={handleCategoryChange} value={selectedCategories} required>
-              {newCategoryList.map(category => (
-                <option key={category.category_id} value={category.category_id}>
-                  {category.category_name}
-                </option>
-              ))}
-              ;
-            </Form.Select>
+            <Container>
+              <Row>
+                {categoryAddOrSelect ? (
+                  <Row>
+                    <Col>
+                      <Form.Control type='text' onChange={e => setCategoryAdd(e.target.value)} required />
+                    </Col>
+                    <Col>
+                      <Button onClick={handleAddCategory}>Dodaj kategorię</Button>
+                    </Col>
+                  </Row>
+                ) : (
+                  <Row>
+                    <Form.Select multiple onChange={handleCategoryChange} value={selectedCategories} required>
+                      {newCategoryList.map(category => (
+                        <option key={category.category_id} value={category.category_id}>
+                          {category.category_name}
+                        </option>
+                      ))}
+                    </Form.Select>
+                  </Row>
+                )}
+                <Button onClick={() => setCategoryAddOrSelect(!categoryAddOrSelect)}>
+                  {categoryAddOrSelect ? 'Wybierz z dostępnych' : 'Dodaj kategorię'}
+                </Button>
+              </Row>
+            </Container>
           </Form.Group>
 
           <Button variant='primary' type='submit'>

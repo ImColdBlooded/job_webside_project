@@ -120,6 +120,7 @@ export const EditProfileForm = () => {
       skillName: '',
     });
   };
+
   const handleAddLink = () => {
     const newLink = { ...linkData };
     setlinkList([...linkList, newLink]);
