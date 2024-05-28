@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Button, Container, Row, Col, Accordion, Alert, Card } from 'react-bootstrap';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 export const SearchPage = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -11,7 +12,10 @@ export const SearchPage = () => {
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedCompanies, setSelectedCompanies] = useState([]);
 
-  const [loadAlert, setLoadAlert] = useState({ show: false, variant: 'success', message: '' });
+  const navigate = useNavigate();
+
+  const [loadAlert, setLoadAlert] = useState({ show: false, variant: 'succes', message: '' });
+  const [errorAlert, setErrorAlert] = useState({ show: false, variant: 'NoData', message: '' });
 
   const [notificationData, setNotificationData] = useState([]);
 
@@ -82,11 +86,10 @@ export const SearchPage = () => {
         //console.log(response.data.message);
 
         setNotificationData(response.data.filteredData);
-        JSON.stringify(notificationData);
-        console.log('siema');
-      } else if (response.data.status === 'error') {
+      } else if (response.data.status === 'NoData') {
         //console.log(response.data.message);
         //setLoadAlert({ show: true, variant: 'danger', message: response.data.message });
+        setNotificationData([]);
       }
     } catch (error) {
       console.error('Error during adding notification', error);
@@ -106,11 +109,15 @@ export const SearchPage = () => {
     }
   }, [selectedCategories, selectedCompanies, searchQuery]);
 
+  const goTonotificationPage = notificationId => {
+    navigate('/notification-page', { state: { notificationId } });
+  };
+
   return (
     <Container style={{ background: 'white', padding: '20px', borderRadius: '20px' }}>
       <Form onSubmit={handleSubmit}>
         <Row className='align-items-center'>
-          <Col xs={12} md={11}>
+          <Col xs={12} md={12}>
             <Form.Group controlId='formSearchQuery'>
               <Form.Label>Wyszukiwanie</Form.Label>
               <Form.Control
@@ -168,7 +175,9 @@ export const SearchPage = () => {
                         </Form.Group>
                       </Col>
 
-                      <Button onClick={handleClearFilters}>Czyść filtry</Button>
+                      <Button onClick={handleClearFilters} style={{ marginTop: '20px' }}>
+                        Czyść filtry
+                      </Button>
                     </Row>
                   </Container>
                 </Accordion.Body>
@@ -177,18 +186,24 @@ export const SearchPage = () => {
           </Col>
         </Row>
       </Form>
-      {loadAlert.show && (
-        <Container>
-          <Alert variant={loadAlert.variant} onClose={() => setLoadAlert({ ...loadAlert, show: false })} dismissible>
-            <Alert.Heading>{loadAlert.variant === 'success' ? 'Success!' : 'Error!'}</Alert.Heading>
-            <p>{loadAlert.message}</p>
-          </Alert>
-        </Container>
-      )}
 
       <Container>
+        {errorAlert.show && (
+          <Container>
+            <Alert
+              variant={errorAlert.variant}
+              onClose={() => setErrorAlert({ ...errorAlert, show: false })}
+              dismissible>
+              <Alert.Heading>
+                {errorAlert.variant === 'NoData' ? 'Error!' : setErrorAlert({ show: false })}
+              </Alert.Heading>
+              <p>{errorAlert.message}</p>
+            </Alert>
+          </Container>
+        )}
+
         {notificationData.map(data => (
-          <Card style={{ width: '100%', marginBottom: '20px', marginTop: '5px' }}>
+          <Card style={{ width: '100%', marginBottom: '20px', marginTop: '5px' }} key={data.id}>
             <Card.Body>
               <Card.Title>
                 <strong>{data.notification_title}</strong>
@@ -203,9 +218,12 @@ export const SearchPage = () => {
                   Wynagrodzenie: {data.salary_range_start} zł - {data.salary_range_end} zł
                 </p>
                 <p>Typ umowy: {data.contract_type}</p>
+                <p>{data.notification_of_work_id}</p>
               </Card.Text>
-
-              <Button variant='primary' style={{ marginLeft: '70%', marginBottom: '5px' }}>
+              <Button
+                variant='primary'
+                onClick={() => goTonotificationPage(data.notification_of_work_id)}
+                style={{ marginLeft: '70%', marginBottom: '5px' }}>
                 Przejdź do strony
               </Button>
             </Card.Body>

@@ -1,9 +1,13 @@
 import React from 'react';
+import { DisplayNotificationData } from '../components/DisplayNotificationData';
+import { useLocation } from 'react-router-dom';
 
 export const NotificationPage = () => {
+  const location = useLocation();
+  const { notificationId } = location.state || {};
   return (
     <>
-      <h1>siema</h1>
+      <DisplayNotificationData data={notificationId} />
     </>
   );
 };

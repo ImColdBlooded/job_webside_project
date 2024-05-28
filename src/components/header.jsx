@@ -64,6 +64,12 @@ export const Header = () => {
                   <NavDropdown.Item as={Link} to='/add-company'>
                     Zarejestruj firme
                   </NavDropdown.Item>
+                  <NavDropdown.Item as={Link} to='/your-notification-page'>
+                    Twoje ogłoszenia
+                  </NavDropdown.Item>
+                  <NavDropdown.Item as={Link} to='/your-applications-page'>
+                    Twoje aplikacje
+                  </NavDropdown.Item>
                   <NavDropdown.Item onClick={handleLogout}>Wyloguj</NavDropdown.Item>
                 </NavDropdown>
               ) : (

@@ -6,6 +6,8 @@ import axios from 'axios';
 export const EditProfileForm = () => {
   const { userData, isLogged, loginUser } = useUserContext();
 
+  const [companyData, setCompanyData] = useState([]);
+
   const [newDisableDateWorkCheckbox, setNewDisableDateWorkCheckBox] = useState(false);
   const [newDisableDateEducationCheckbox, setNewDisableDateEducationCheckBox] = useState(false);
   const [newDisableDateCourseCheckbox, setNewDisableDateCourseCheckBox] = useState(false);
@@ -28,7 +30,6 @@ export const EditProfileForm = () => {
   const [workExperienceData, setWorkExperienceData] = useState({
     position: '',
     companyName: '',
-    location: '',
     startDate: '',
     endDate: '',
     isOngoing: false,
@@ -41,6 +42,7 @@ export const EditProfileForm = () => {
     fieldOfStudy: '',
     startDate: '',
     endDate: '',
+    shoolWebside: '',
     isOngoing: false,
   });
 
@@ -72,6 +74,14 @@ export const EditProfileForm = () => {
       loginUser(JSON.parse(storeData));
     }
   }, [isLogged, loginUser]);
+
+  const companies_url = 'http://localhost/stronaZOfertamiPracy/getAllCompanies.php';
+  useEffect(() => {
+    fetch(companies_url)
+      .then(response => response.json())
+      .then(data => setCompanyData(data.companyData))
+      .catch(error => console.error('Error fetching companies', error));
+  }, []);
 
   const handleAddWorkExperience = () => {
     const newWorkExperience = { ...workExperienceData };
@@ -203,7 +213,7 @@ export const EditProfileForm = () => {
   const handleUpdateUserProfile = async (e, userId) => {
     e.preventDefault();
 
-    console.log(
+    /*console.log(
       userName,
       userSurname,
       userEmail,
@@ -212,7 +222,7 @@ export const EditProfileForm = () => {
       userPosition,
       userPositionDescript,
       userCareerSummary
-    );
+    );*/
 
     const updateUserUrl = `http://localhost/StronaZOfertamiPracy/updateProfile.php?user_id=${userId}`;
 
@@ -236,6 +246,7 @@ export const EditProfileForm = () => {
     try {
       const response = await axios.post(updateUserUrl, userUpdateData);
       console.log(skillsList);
+      console.log(workExperienceList);
       console.log(JSON.stringify(skillsList));
 
       if (response.data.success) {
@@ -316,25 +327,21 @@ export const EditProfileForm = () => {
                       onChange={e => setWorkExperienceData({ ...workExperienceData, position: e.target.value })}
                     />
 
-                    <Form.Label>Nazwa firmy</Form.Label>
-                    <Form.Control
-                      type='text'
-                      value={workExperienceData.company}
-                      onChange={e => setWorkExperienceData({ ...workExperienceData, companyName: e.target.value })}
-                    />
-
-                    <Form.Text id='textCompany' muted>
-                      Lub wybierz firmę z pola niżej
-                    </Form.Text>
-                    <Form.Select></Form.Select>
+                    <Form.Label>Firma</Form.Label>
+                    <Form.Select
+                      value={workExperienceData.companyName}
+                      onChange={e => setWorkExperienceData({ ...workExperienceData, companyName: e.target.value })}>
+                      <option disabled selected>
+                        Wybierz firmę
+                      </option>
+                      {companyData.map(comp => (
+                        <option value={comp.company_id}>{comp.company_name}</option>
+                      ))}
+                    </Form.Select>
+                    <p style={{ fontSize: '10px' }}>
+                      Jeżeli nie ma twojej firmy na liście <a href='http://localhost:3000/add-company'>kliknij tutaj</a>
+                    </p>
                     <br></br>
-
-                    <Form.Label>Lokalizacja</Form.Label>
-                    <Form.Control
-                      type='text'
-                      value={workExperienceData.location}
-                      onChange={e => setWorkExperienceData({ ...workExperienceData, location: e.target.value })}
-                    />
 
                     <Container fluid>
                       <Row>
@@ -409,6 +416,13 @@ export const EditProfileForm = () => {
                       onChange={e => setEducationData({ ...educationData, fieldOfStudy: e.target.value })}
                     />
 
+                    <Form.Label>Strona twojej szkoły</Form.Label>
+                    <Form.Control
+                      type='text'
+                      value={educationData.shoolWebside}
+                      onChange={e => setEducationData({ ...educationData, shoolWebside: e.target.value })}
+                    />
+
                     <Container fluid>
                       <Row>
                         <Form.Label>Okres od do</Form.Label>
@@ -452,8 +466,8 @@ export const EditProfileForm = () => {
                     <Container fluid>
                       <Form.Control
                         placeholder='Język'
-                        value={languageData.name}
-                        onChange={e => setLanguageData({ ...languageData, name: e.target.value })}
+                        value={languageData.language}
+                        onChange={e => setLanguageData({ ...languageData, language: e.target.value })}
                       />
                       <Form.Label>Poziom</Form.Label>
                       <Form.Select onChange={e => setLanguageData({ ...languageData, level: e.target.value })}>
@@ -609,7 +623,7 @@ export const EditProfileForm = () => {
             <ul>
               {languageList.map((language, index) => (
                 <li key={index}>
-                  Name: {language.name} level: {language.level}
+                  Name: {language.language} level: {language.level}
                   <span> </span>
                   <Button onClick={() => handleRemoveLanguage(index)}>Usuń</Button>
                 </li>
