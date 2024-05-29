@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useUserContext } from '../ContextApi/userData';
-import { Col, Container, Row } from 'react-bootstrap';
+import { Button, Col, Container, Row } from 'react-bootstrap';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 export const DisplayUserNotifications = () => {
   const [userNotifications, setUserNotifications] = useState([]);
   const { userData, isLogged, loginUser } = useUserContext();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (userData.user_id > 0) {
@@ -33,6 +35,10 @@ export const DisplayUserNotifications = () => {
     }
   };
 
+  const goTonotificationPage = notificationId => {
+    navigate('/notification-page', { state: { notificationId } });
+  };
+
   return (
     <>
       <Container style={{ backgroundColor: 'white', padding: '20px', borderRadius: '20px' }}>
@@ -52,6 +58,11 @@ export const DisplayUserNotifications = () => {
                 <Row>
                   <h2 style={{ color: '#337ab7', fontSize: '18px', fontWeight: 'bold' }}>{data.notification_title}</h2>
                   <Col style={{ fontSize: '16px', color: '#666' }}>{data.notification_descript}</Col>
+                </Row>
+                <Row>
+                  <Col>
+                    <Button onClick={() => goTonotificationPage(data.notification_of_work_id)}>Przejdz</Button>
+                  </Col>
                 </Row>
               </Container>
             ))}

@@ -13,9 +13,9 @@ export const DisplayNotificationData = ({ data }) => {
 
   const handleChechApplicationVisibility = (userData, fetchedUserData) => {
     if (userData === fetchedUserData) {
-      return false;
-    } else {
       return true;
+    } else {
+      return false;
     }
   };
 

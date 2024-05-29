@@ -1,10 +1,12 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { useUserContext } from '../ContextApi/userData';
-import { Col, Container, Row } from 'react-bootstrap';
+import { Button, Col, Container, Row } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 
 export const DisplayUserAplications = () => {
   const { userData } = useUserContext();
+  const navigate = useNavigate();
   const [userApplications, setUserApplications] = useState([]);
 
   const handleGetApplicationData = async () => {
@@ -18,7 +20,7 @@ export const DisplayUserAplications = () => {
 
       //console.log('seima');
       if (response.data.status === 'success') {
-        console.log('siema');
+        //console.log('siema');
         setUserApplications(response.data.aplicationsData);
       } else if (response.data.status === 'error') {
         console.error('Error:' + response.data.message);
@@ -33,6 +35,10 @@ export const DisplayUserAplications = () => {
       handleGetApplicationData();
     }
   }, [userData.user_id]);
+
+  const goTonotificationPage = notificationId => {
+    navigate('/notification-page', { state: { notificationId } });
+  };
 
   return (
     <>
@@ -56,7 +62,14 @@ export const DisplayUserAplications = () => {
                       <h2 style={{ color: '#337ab7', fontSize: '18px', fontWeight: 'bold' }}>
                         {data.notification_title}
                       </h2>
-                      <Col style={{ fontSize: '16px', color: '#666' }}>{data.date}</Col>
+                      <Col style={{ fontSize: '16px', color: '#666' }}>
+                        Data zgłoszenia: <span style={{ fontWeight: 'bold' }}>{data.date}</span>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col>
+                        <Button onClick={() => goTonotificationPage(data.notification_of_work_id)}>Przejdz</Button>
+                      </Col>
                     </Row>
                   </Container>
                 ))}
