@@ -75,7 +75,9 @@ export const LoginPage = () => {
         try {
           const response = await axios.post(loginUrl, UserData);
 
-          if (response.data.successLog) {
+          //console.log(response.data.successLog);
+
+          if (response.data.successLog === true) {
             setshowSuccessAlertLog(true);
             setShowErrorPassAlertLog(false);
             setShowErrorUserExistLog(false);
@@ -94,18 +96,16 @@ export const LoginPage = () => {
                 career_summary: response.data.userData.career_summary,
                 isAdmin: response.data.userData.isAdmin,
               });
+
+              console.log(response.data.userData.user_id);
             }
             handleLoginSuccess();
-          } else if (response.data.errorPass) {
+          } else if (response.data.errorPassLog === true) {
             setShowErrorPassAlertLog(true);
-            setshowSuccessAlertLog(false);
-            setShowErrorUserExistLog(false);
-            console.log('Error pass');
-          } else if (response.data.errorUser) {
+            //console.log('Error pass');
+          } else if (response.data.errorUserLog === true) {
             setShowErrorUserExistLog(true);
-            setShowErrorPassAlertLog(false);
-            setshowSuccessAlertLog(false);
-            console.log('Error user');
+            //console.log('Error user');
           }
         } catch (error) {
           console.error('Error during login:', error);

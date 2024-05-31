@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form, Button, Container, Alert, Row } from 'react-bootstrap';
+import { Form, Button, Container, Alert, Row, Col } from 'react-bootstrap';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import axios from 'axios';
@@ -11,11 +11,16 @@ export const AddCompanyForm = () => {
   const [companyAddress, setCompanyAddress] = useState('');
   const [companyName, setCompanyName] = useState('');
   const [companyDescription, setCompanyDescription] = useState('');
+  const [profileImage, setProfileImage] = useState(null);
 
   const [alertData, setAlertData] = useState({ show: false, variant: 'success', message: '' });
 
   const handleMapClick = e => {
     setLocation(e.latlng);
+  };
+
+  const handleFileChange = e => {
+    setProfileImage(e.target.files[0]);
   };
 
   const handleSearch = () => {
@@ -45,6 +50,7 @@ export const AddCompanyForm = () => {
     companyData.append('companyName', companyName);
     companyData.append('companyAddress', companyAddress);
     companyData.append('companyDescription', companyDescription);
+    companyData.append('companyImg', profileImage);
     companyData.append('lat', JSON.stringify(location.lat));
     companyData.append('lng', JSON.stringify(location.lng));
 
@@ -80,44 +86,57 @@ export const AddCompanyForm = () => {
         )}
 
         <Form onSubmit={handleSubmit}>
-          <Form.Group className='mb-3'>
-            <Form.Label>Nazwa firmy</Form.Label>
-            <Form.Control type='text' placeholder='' onChange={e => setCompanyName(e.target.value)} />
-          </Form.Group>
+          <Container>
+            <Row>
+              <Col>
+                <Form.Group className='mb-3'>
+                  <Form.Label>Nazwa firmy</Form.Label>
+                  <Form.Control type='text' placeholder='' onChange={e => setCompanyName(e.target.value)} />
+                </Form.Group>
+              </Col>
 
-          <Form.Group className='mb-3'>
-            <Form.Label>Adres firmy</Form.Label>
-            <Container>
-              <Row>
-                <Form.Control type='text' placeholder='' onChange={e => setCompanyAddress(e.target.value)} />
-                <Button variant='primary' onClick={handleSearch}>
-                  Szukaj
-                </Button>
-              </Row>
-            </Container>
-          </Form.Group>
+              <Col>
+                <Form.Group className='mb-3'>
+                  <Form.Label>Adres firmy</Form.Label>
+                  <Container>
+                    <Row>
+                      <Form.Control type='text' placeholder='' onChange={e => setCompanyAddress(e.target.value)} />
+                      <Button variant='primary' onClick={handleSearch}>
+                        Szukaj
+                      </Button>
+                    </Row>
+                  </Container>
+                </Form.Group>
+              </Col>
+            </Row>
 
-          <Form.Group className='mb-3'>
-            <Form.Label>Lokalizacja</Form.Label>
-            <MapContainer
-              center={searchedLocation || location}
-              zoom={13}
-              style={{ height: '300px' }}
-              onClick={handleMapClick}>
-              <TileLayer url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png' />
-              {searchedLocation && (
-                <Marker position={searchedLocation}>
-                  <Popup>{companyAddress}</Popup>
-                </Marker>
-              )}
-            </MapContainer>
-          </Form.Group>
+            <Form.Group className='mb-3'>
+              <Form.Label>Lokalizacja</Form.Label>
+              <MapContainer center={searchedLocation} zoom={13} style={{ height: '300px' }} onClick={handleMapClick}>
+                <TileLayer url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png' />
+                {searchedLocation && (
+                  <Marker position={searchedLocation}>
+                    <Popup>{companyAddress}</Popup>
+                  </Marker>
+                )}
+              </MapContainer>
+            </Form.Group>
 
-          <Form.Group className='mb-3'>
-            <Form.Label>Opis firmy</Form.Label>
-            <Form.Control type='text' placeholder='' onChange={e => setCompanyDescription(e.target.value)} />
-          </Form.Group>
-
+            <Row>
+              <Col>
+                <Form.Group className='mb-3'>
+                  <Form.Label>Opis firmy</Form.Label>
+                  <Form.Control type='text' placeholder='' onChange={e => setCompanyDescription(e.target.value)} />
+                </Form.Group>
+              </Col>
+              <Col>
+                <Form.Group className='mb-3'>
+                  <Form.Label>Logo firmy</Form.Label>
+                  <Form.Control type='file' onChange={handleFileChange} />
+                </Form.Group>
+              </Col>
+            </Row>
+          </Container>
           <Button variant='primary' type='submit'>
             Dodaj firmę
           </Button>

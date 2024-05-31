@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useUserContext } from '../ContextApi/userData';
-import { Button, Col, Container, Row } from 'react-bootstrap';
+import { Button, Col, Container, Row, Accordion, Card } from 'react-bootstrap';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
@@ -56,8 +56,11 @@ export const DisplayUserNotifications = () => {
                   boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
                 }}>
                 <Row>
-                  <h2 style={{ color: '#337ab7', fontSize: '18px', fontWeight: 'bold' }}>{data.notification_title}</h2>
                   <Col style={{ fontSize: '16px', color: '#666' }}>{data.notification_descript}</Col>
+                  <Col style={{ fontSize: '16px', color: '#666' }}>
+                    Liczba aplikujących do twojego ogłoszenia:{' '}
+                    <span style={{ fontWeight: 'bold', fontSize: '20px' }}>{data.appliedUsers}</span>
+                  </Col>
                 </Row>
                 <Row>
                   <Col>
@@ -68,6 +71,17 @@ export const DisplayUserNotifications = () => {
             ))}
           </Col>
         </Row>
+
+        <Accordion>
+          <Card>
+            <Card.Header>
+              <Accordion.Toggle></Accordion.Toggle>
+            </Card.Header>
+            <Accordion.Collapse>
+              <Card.Body></Card.Body>
+            </Accordion.Collapse>
+          </Card>
+        </Accordion>
       </Container>
     </>
   );

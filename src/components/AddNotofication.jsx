@@ -46,6 +46,8 @@ export const AddNotification = () => {
 
   const [categoryAddOrSelect, setCategoryAddOrSelect] = useState(false);
 
+  const [disabledCompany, setDisabledCompany] = useState(false);
+
   const handleCategoryChange = e => {
     const selectedOptions = Array.from(e.target.selectedOptions, option => option.value);
     setSelectedCategories(selectedOptions);
@@ -110,6 +112,10 @@ export const AddNotification = () => {
     }
   };
 
+  const handleChangeEnabled = () => {
+    setDisabledCompany(!disabledCompany);
+  };
+
   const companies_url = 'http://localhost/stronaZOfertamiPracy/getAllCompanies.php';
   useEffect(() => {
     fetch(companies_url)
@@ -143,6 +149,7 @@ export const AddNotification = () => {
   }, []);
 
   const handleSubmit = async e => {
+    e.preventDefault();
     //console.log(selectedCategories);
 
     const addNotificationUrl = 'http://localhost/stronaZOfertamiPracy/addNotificationtodatabase.php';
@@ -217,7 +224,12 @@ export const AddNotification = () => {
                 <a href='http://localhost:3000/add-company'>formularza dodawania firmy</a> )
               </span>
             </Form.Label>
-            <Form.Control as='select' onChange={handleCompanyChange} value={selectedCompany} required>
+            <Form.Control
+              as='select'
+              onChange={handleCompanyChange}
+              value={selectedCompany}
+              required
+              disabled={disabledCompany}>
               <option value=''>Wybierz firmę</option>
               {newCompaniesList.map(company => (
                 <option key={company.company_id} value={company.company_id}>
@@ -225,6 +237,7 @@ export const AddNotification = () => {
                 </option>
               ))}
             </Form.Control>
+            <Form.Check type='checkbox' label='Jestem osobą prywatną' onChange={handleChangeEnabled} />
           </Form.Group>
 
           <Form.Group className='mb-3'>

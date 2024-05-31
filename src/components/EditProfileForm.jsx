@@ -17,7 +17,7 @@ export const EditProfileForm = () => {
   const [skillsList, setSkillsList] = useState([]);
   const [courseList, setCourseList] = useState([]);
   const [linkList, setlinkList] = useState([]);
-
+  const [profileImage, setProfileImage] = useState(null);
   const [userName, setUserName] = useState(userData.name || '');
   const [userSurname, setUserSurname] = useState(userData.surname || '');
   const [userBirthDate, setUserBirthDate] = useState(userData.birth_date || '');
@@ -153,6 +153,10 @@ export const EditProfileForm = () => {
     });
   };
 
+  const handleFileChange = e => {
+    setProfileImage(e.target.files[0]);
+  };
+
   const handleDisableEndDateWorkInput = () => {
     setNewDisableDateWorkCheckBox(!newDisableDateWorkCheckbox);
     if (newDisableDateWorkCheckbox) {
@@ -235,7 +239,7 @@ export const EditProfileForm = () => {
     userUpdateData.append('position', userPosition);
     userUpdateData.append('positionDescr', userPositionDescript);
     userUpdateData.append('career_summary', userCareerSummary);
-
+    userUpdateData.append('profile_image', profileImage);
     userUpdateData.append('workExperienceList', JSON.stringify(workExperienceList));
     userUpdateData.append('educationList', JSON.stringify(educationList));
     userUpdateData.append('languageList', JSON.stringify(languageList));
@@ -589,7 +593,7 @@ export const EditProfileForm = () => {
         <Col>
           <Form.Group className='mb-3'>
             <Form.Label>Zdjęcie profilowe</Form.Label>
-            <Form.Control type='file' placeholder='' />
+            <Form.Control type='file' onChange={handleFileChange} />
           </Form.Group>
 
           <Container id='displayListWorkExperience'>

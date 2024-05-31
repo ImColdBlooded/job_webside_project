@@ -47,7 +47,7 @@ export const DisplayNotificationData = ({ data }) => {
 
       if (response.data.status === 'success') {
         setButtonInformation({ message: response.data.status, state: false });
-        //console.log('Success');
+        console.log('Success');
       } else if (response.data.status === 'error') {
         console.error('Error:' + response.data.message);
       }

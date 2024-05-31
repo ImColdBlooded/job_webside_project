@@ -49,7 +49,9 @@ export const DisplayNotificationByCategory = ({ category }) => {
         <Carousel>
           {notifications.map(notification => (
             <Carousel.Item key={notification.notification_title}>
-              <Card style={{ width: '100%', border: 'none', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)' }}>
+              <Card
+                style={{ width: '100%', border: 'none', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)', cursor: 'pointer' }}
+                onClick={() => goTonotificationPage(notification.notification_of_work_id)}>
                 <Card.Body>
                   <Card.Title>
                     <strong style={{ fontSize: '18px', color: '#333' }}>{notification.notification_title}</strong>
@@ -65,18 +67,6 @@ export const DisplayNotificationByCategory = ({ category }) => {
                     </p>
                     <p style={{ fontSize: '14px', color: '#666' }}>Typ umowy: {notification.contract_type}</p>
                   </Card.Text>
-
-                  <Button
-                    variant='primary'
-                    onClick={() => goTonotificationPage(notification.notification_of_work_id)}
-                    style={{
-                      marginLeft: '70%',
-                      marginBottom: '5px',
-                      backgroundColor: '#337ab7',
-                      borderColor: '#337ab7',
-                    }}>
-                    Przejdź do strony
-                  </Button>
                 </Card.Body>
               </Card>
             </Carousel.Item>

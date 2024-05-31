@@ -3,6 +3,7 @@ import { Container, Row, Col, Card, CardBody, CardTitle, CardText } from 'react-
 import { useUserContext } from '../ContextApi/userData';
 import '../css/UserPage.css';
 import axios from 'axios';
+import defaultPicture from '../images/user_profile_icon.jpg';
 
 export const DisplayUserProfileData = () => {
   const { userData, isLogged, loginUser } = useUserContext();
@@ -10,6 +11,7 @@ export const DisplayUserProfileData = () => {
   const [userSkills, setUserSkills] = useState([]);
   const [userWorkExp, setUserWorkExp] = useState([]);
   const [userEducation, setUserEducation] = useState([]);
+  const [userProfImg, setUserProfImg] = useState(null);
 
   useEffect(() => {
     const storeData = localStorage.getItem('UserData');
@@ -33,13 +35,16 @@ export const DisplayUserProfileData = () => {
     try {
       const response = await axios.post(advacedData_url, UserData);
 
-      if (response.data.status === 'success') {
-        //console.log(response.data.skill_data);
+      console.log(response.data);
 
-        //console.log('siema');
+      if (response.data.status === 'success') {
+        //console.log(response.data);
+        //console.log('siema if in try');
         setUserSkills(response.data.skill_data);
         setUserWorkExp(response.data.workExpData);
         setUserEducation(response.data.educationData);
+
+        setUserProfImg(response.data.profileImgData);
       } else if (response.data.error) {
         console.log('error', response.data.error);
       }
@@ -52,6 +57,14 @@ export const DisplayUserProfileData = () => {
     sendUserId(userData.user_id);
   }, []);
 
+  const handeCheckUserProfileImage = () => {
+    if (userProfImg != null) {
+      return `data:image/jpeg;base64, ${userProfImg}`;
+    } else {
+      return defaultPicture;
+    }
+  };
+
   return (
     <Container className='userDisplay'>
       <Row>
@@ -63,9 +76,9 @@ export const DisplayUserProfileData = () => {
                   {userData.name} {userData.surname}
                 </span>
                 <img
-                  src='https://static.vecteezy.com/system/resources/thumbnails/002/318/271/small/user-profile-icon-free-vector.jpg'
-                  alt='obraz profilpwy uzytkownka'
-                  style={{ float: 'right' }}
+                  src={handeCheckUserProfileImage()}
+                  alt='obraz profilowy uzytkownka'
+                  style={{ float: 'right', width: '200px', borderRadius: '50%' }}
                 />
               </p>
             </CardTitle>
