@@ -60,10 +60,10 @@ export const EditProfileForm = () => {
   });
 
   const [courseData, setCourseData] = useState({
-    courseName: '',
-    startDate: '',
-    endDate: '',
-    organiser: '',
+    course_name: '',
+    course_organiser: '',
+    course_startDate: '',
+    course_endDate: '',
   });
 
   const [linkData, setLinkData] = useState({
@@ -149,10 +149,10 @@ export const EditProfileForm = () => {
     setCourseList([...courseList, newCourse]);
 
     setCourseData({
-      courseName: '',
-      startDate: '',
-      endDate: '',
-      organiser: '',
+      course_name: '',
+      course_organiser: '',
+      course_startDate: '',
+      course_endDate: '',
     });
   };
 
@@ -177,7 +177,7 @@ export const EditProfileForm = () => {
   const handleDisableEndDateCourseInput = () => {
     setNewDisableDateCourseCheckBox(!newDisableDateCourseCheckbox);
     if (newDisableDateCourseCheckbox) {
-      setCourseData({ ...courseData, endDate: '' });
+      setCourseData({ ...courseData, course_endDate: '' });
     }
   };
 
@@ -572,15 +572,15 @@ export const EditProfileForm = () => {
                       <Form.Label>Nazwa</Form.Label>
                       <Form.Control
                         type='text'
-                        value={courseData.courseName}
-                        onChange={e => setCourseData({ ...courseData, courseName: e.target.value })}
+                        value={courseData.course_name}
+                        onChange={e => setCourseData({ ...courseData, course_name: e.target.value })}
                       />
 
                       <Form.Label>Organizator</Form.Label>
                       <Form.Control
                         type='text'
-                        value={courseData.organiser}
-                        onChange={e => setCourseData({ ...courseData, organiser: e.target.value })}
+                        value={courseData.course_organiser}
+                        onChange={e => setCourseData({ ...courseData, course_organiser: e.target.value })}
                       />
 
                       <Form.Label>Data odbycia</Form.Label>
@@ -588,14 +588,16 @@ export const EditProfileForm = () => {
                         <Col>
                           <Form.Control
                             type='date'
-                            value={courseData.startDate}
-                            onChange={e => setCourseData({ ...courseData, startDate: e.target.value })}></Form.Control>
+                            value={courseData.course_startDate}
+                            onChange={e =>
+                              setCourseData({ ...courseData, course_startDate: e.target.value })
+                            }></Form.Control>
                         </Col>
                         <Col>
                           <Form.Control
                             type='date'
-                            value={courseData.endDate}
-                            onChange={e => setCourseData({ ...courseData, endDate: e.target.value })}
+                            value={courseData.course_endDate}
+                            onChange={e => setCourseData({ ...courseData, course_endDate: e.target.value })}
                             disabled={newDisableDateCourseCheckbox ? true : false}></Form.Control>
                         </Col>
                       </Row>
@@ -709,8 +711,8 @@ export const EditProfileForm = () => {
             <ul>
               {courseList.map((course, index) => (
                 <li key={index}>
-                  Name: {course.courseName}. Organizator: {course.organiser} odbyty w dniu(ach) {course.startDate} -{' '}
-                  {course.endDate}
+                  Name: {course.course_name}. Organizator: {course.course_organiser} odbyty w dniu(ach){' '}
+                  {course.course_startDate} - {course.course_endDate}
                   <span> </span>
                   <Button onClick={() => handleRemoveCourse(index)}>Usuń</Button>
                 </li>

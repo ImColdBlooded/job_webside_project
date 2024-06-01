@@ -13,6 +13,7 @@ export const DisplayUserProfileData = () => {
   const [userEducation, setUserEducation] = useState([]);
   const [userLanguage, setUserLanguage] = useState([]);
   const [userLinks, setUserLinks] = useState([]);
+  const [userCourses, setUserCourses] = useState([]);
   const [userProfImg, setUserProfImg] = useState(null);
 
   useEffect(() => {
@@ -47,6 +48,7 @@ export const DisplayUserProfileData = () => {
         setUserEducation(response.data.educationData);
         setUserLanguage(response.data.languageData);
         setUserLinks(response.data.linkData);
+        setUserCourses(response.data.courseData);
 
         setUserProfImg(response.data.profileImgData);
 
@@ -148,7 +150,7 @@ export const DisplayUserProfileData = () => {
               <Card style={{ border: 'none' }}>
                 <CardBody>
                   <CardTitle>
-                    <h2>Work Experience</h2>
+                    <h2>Doświaczenie zawodowe</h2>
                   </CardTitle>
                   <CardText>
                     {userWorkExp.length > 0 ? (
@@ -186,7 +188,7 @@ export const DisplayUserProfileData = () => {
               <Card style={{ border: 'none' }}>
                 <CardBody>
                   <CardTitle>
-                    <h2>Education</h2>
+                    <h2>Edukacja</h2>
                   </CardTitle>
                   <CardText>
                     {userEducation.length > 0 ? (
@@ -228,7 +230,7 @@ export const DisplayUserProfileData = () => {
                         ))}
                       </ul>
                     ) : (
-                      <p>Użytkownik nie posiada doświadczenia zawodowego</p>
+                      <p>Użytkownik nie posiada zdefiniowanej edukacji </p>
                     )}
                   </CardText>
                 </CardBody>
@@ -240,7 +242,7 @@ export const DisplayUserProfileData = () => {
               <Card style={{ border: 'none' }}>
                 <CardBody>
                   <CardTitle>
-                    <h2>Skills</h2>
+                    <h2>Umiejętności</h2>
                   </CardTitle>
                   <CardText>
                     <>
@@ -262,10 +264,28 @@ export const DisplayUserProfileData = () => {
               <Card style={{ border: 'none' }}>
                 <CardBody>
                   <CardTitle>
-                    <h2>Certifications</h2>
+                    <h2>Kursy</h2>
                   </CardTitle>
                   <CardText>
-                    <p>{userData.certifications}</p>
+                    <>
+                      {userCourses.length > 0 ? (
+                        <>
+                          {userCourses.map((data, index) => (
+                            <>
+                              {' '}
+                              <p key={data.index}>
+                                {data.course_name}, którego organizatorem był {data.course_organiser}
+                              </p>
+                              <p>
+                                Czas Trwania: {data.course_startDate} - {}
+                              </p>
+                            </>
+                          ))}
+                        </>
+                      ) : (
+                        <p>Użytkownik nie posiada zdefiniowanych kursów</p>
+                      )}
+                    </>
                   </CardText>
                 </CardBody>
               </Card>
@@ -276,7 +296,7 @@ export const DisplayUserProfileData = () => {
               <Card style={{ border: 'none' }}>
                 <CardBody>
                   <CardTitle>
-                    <h2>Language Skills</h2>
+                    <h2>Języki</h2>
                   </CardTitle>
                   <CardText>
                     <>
@@ -292,7 +312,7 @@ export const DisplayUserProfileData = () => {
                           ))}
                         </>
                       ) : (
-                        <p>Użytkownik nie posiada zdefiniowanych umiejętności</p>
+                        <p>Użytkownik nie posiada zdefiniowanych języków</p>
                       )}
                     </>
                   </CardText>
@@ -321,7 +341,7 @@ export const DisplayUserProfileData = () => {
                           ))}
                         </>
                       ) : (
-                        <p>Użytkownik nie posiada zdefiniowanych umiejętności</p>
+                        <p>Użytkownik nie posiada zdefiniowanych linków</p>
                       )}
                     </>
                   </CardText>
