@@ -69,59 +69,6 @@ export const MainPage = () => {
           </Col>
         </Row>
 
-        <Row className='mt-5'>
-          <Col xs={12} md={2} style={{ display: 'flex', flexDirection: 'column' }}>
-            <div
-              className='d-flex justify-content-between align-items-center p-3'
-              style={{ backgroundColor: '#f0f0f0', borderRadius: '10px' }}>
-              <h5 style={{ fontWeight: 'bold' }}>Najnowsze rekomendacje</h5>
-              <span>
-                <i className='fa fa-arrow-right' />
-              </span>
-            </div>
-          </Col>
-          <Col xs={12} md={2} style={{ display: 'flex', flexDirection: 'column' }}>
-            <div
-              className='d-flex justify-content-between align-items-center p-3'
-              style={{ backgroundColor: '#f0f0f0', borderRadius: '10px' }}>
-              <h5 style={{ fontWeight: 'bold' }}>Osoby o Twoich kompetencjach aplikowały na</h5>
-              <span>
-                <i className='fa fa-arrow-right' />
-              </span>
-            </div>
-          </Col>
-          <Col xs={12} md={2} style={{ display: 'flex', flexDirection: 'column' }}>
-            <div
-              className='d-flex justify-content-between align-items-center p-3'
-              style={{ backgroundColor: '#f0f0f0', borderRadius: '10px' }}>
-              <h5 style={{ fontWeight: 'bold' }}>Ostatnio oglądane</h5>
-              <span>
-                <i className='fa fa-arrow-right' />
-              </span>
-            </div>
-          </Col>
-          <Col xs={12} md={2} style={{ display: 'flex', flexDirection: 'column' }}>
-            <div
-              className='d-flex justify-content-between align-items-center p-3'
-              style={{ backgroundColor: '#f0f0f0', borderRadius: '10px' }}>
-              <h5 style={{ fontWeight: 'bold' }}>Superoferty</h5>
-              <span>
-                <i className='fa fa-arrow-right' />
-              </span>
-            </div>
-          </Col>
-          <Col xs={12} md={2} style={{ display: 'flex', flexDirection: 'column' }}>
-            <div
-              className='d-flex justify-content-between align-items-center p-3'
-              style={{ backgroundColor: '#f0f0f0', borderRadius: '10px' }}>
-              <h5 style={{ fontWeight: 'bold' }}>Oferty dnia</h5>
-              <span>
-                <i className='fa fa-arrow-right' />
-              </span>
-            </div>
-          </Col>
-        </Row>
-
         {randomCategories.map((category, index) => (
           <Row className='mt-5' key={index}>
             <Col>

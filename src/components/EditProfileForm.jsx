@@ -236,6 +236,7 @@ export const EditProfileForm = () => {
         setEducationList(response.data.educationData);
         setLanguagenList(response.data.languageData);
         setlinkList(response.data.linkData);
+        setCourseList(response.data.courseData);
 
         //console.log()
       } else if (response.data.error) {
@@ -712,7 +713,7 @@ export const EditProfileForm = () => {
               {courseList.map((course, index) => (
                 <li key={index}>
                   Name: {course.course_name}. Organizator: {course.course_organiser} odbyty w dniu(ach){' '}
-                  {course.course_startDate} - {course.course_endDate}
+                  {course.course_startDate} - {course.course_endDate === '0' ? course.course_endDate : "Trwa nadal"}
                   <span> </span>
                   <Button onClick={() => handleRemoveCourse(index)}>Usuń</Button>
                 </li>

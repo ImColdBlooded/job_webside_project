@@ -6,7 +6,7 @@ import axios from 'axios';
 
 export const AddCompanyForm = () => {
   const [location, setLocation] = useState({ lat: 51.505, lng: -0.09 });
-  const [searchedLocation, setSearchedLocation] = useState(null);
+  const [searchedLocation, setSearchedLocation] = useState({ lat: 51.505, lng: -0.09 });
 
   const [companyAddress, setCompanyAddress] = useState('');
   const [companyName, setCompanyName] = useState('');
@@ -112,7 +112,11 @@ export const AddCompanyForm = () => {
 
             <Form.Group className='mb-3'>
               <Form.Label>Lokalizacja</Form.Label>
-              <MapContainer center={searchedLocation} zoom={13} style={{ height: '300px' }} onClick={handleMapClick}>
+              <MapContainer
+                center={[searchedLocation.lat, searchedLocation.lng]}
+                zoom={13}
+                style={{ height: '300px' }}
+                onClick={handleMapClick}>
                 <TileLayer url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png' />
                 {searchedLocation && (
                   <Marker position={searchedLocation}>

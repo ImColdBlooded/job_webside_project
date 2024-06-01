@@ -277,7 +277,8 @@ export const DisplayUserProfileData = () => {
                                 {data.course_name}, którego organizatorem był {data.course_organiser}
                               </p>
                               <p>
-                                Czas Trwania: {data.course_startDate} - {}
+                                Czas Trwania: {data.course_startDate} -{' '}
+                                {data.course_endDate === '0' ? data.course_endDate : 'Trwa nadal'}
                               </p>
                             </>
                           ))}
@@ -333,9 +334,12 @@ export const DisplayUserProfileData = () => {
                             <p>
                               {' '}
                               <span key={data.index}>
-                                <a href={data.link_source} target='_blank' rel='noopener noreferrer'>
-                                  {data.link_name}
-                                </a>{' '}
+                                <p>
+                                  {data.link_name}:{' '}
+                                  <a href={data.link_source} target='_blank' rel='noopener noreferrer'>
+                                    {data.link_source}
+                                  </a>
+                                </p>{' '}
                               </span>
                             </p>
                           ))}
