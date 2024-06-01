@@ -71,17 +71,6 @@ export const DisplayUserNotifications = () => {
             ))}
           </Col>
         </Row>
-
-        <Accordion>
-          <Card>
-            <Card.Header>
-              <Accordion.Toggle></Accordion.Toggle>
-            </Card.Header>
-            <Accordion.Collapse>
-              <Card.Body></Card.Body>
-            </Accordion.Collapse>
-          </Card>
-        </Accordion>
       </Container>
     </>
   );

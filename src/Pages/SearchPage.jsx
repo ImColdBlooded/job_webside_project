@@ -203,7 +203,10 @@ export const SearchPage = () => {
         )}
 
         {notificationData.map(data => (
-          <Card style={{ width: '100%', marginBottom: '20px', marginTop: '5px' }} key={data.id}>
+          <Card
+            style={{ width: '100%', marginBottom: '20px', marginTop: '5px', cursor: 'pointer' }}
+            key={data.id}
+            onClick={() => goTonotificationPage(data.notification_of_work_id)}>
             <Card.Body>
               <Card.Title>
                 <strong>{data.notification_title}</strong>
@@ -220,12 +223,6 @@ export const SearchPage = () => {
                 <p>Typ umowy: {data.contract_type}</p>
                 <p>{data.notification_of_work_id}</p>
               </Card.Text>
-              <Button
-                variant='primary'
-                onClick={() => goTonotificationPage(data.notification_of_work_id)}
-                style={{ marginLeft: '70%', marginBottom: '5px' }}>
-                Przejdź do strony
-              </Button>
             </Card.Body>
           </Card>
         ))}

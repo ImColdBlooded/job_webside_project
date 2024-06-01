@@ -11,12 +11,16 @@ export const EditProfileForm = () => {
   const [newDisableDateWorkCheckbox, setNewDisableDateWorkCheckBox] = useState(false);
   const [newDisableDateEducationCheckbox, setNewDisableDateEducationCheckBox] = useState(false);
   const [newDisableDateCourseCheckbox, setNewDisableDateCourseCheckBox] = useState(false);
+
+  //listy pobierane z bazy danych
   const [workExperienceList, setWorkExperienceList] = useState([]);
   const [educationList, setEducationList] = useState([]);
   const [languageList, setLanguagenList] = useState([]);
   const [skillsList, setSkillsList] = useState([]);
   const [courseList, setCourseList] = useState([]);
   const [linkList, setlinkList] = useState([]);
+
+  //pobrane z localstorage (trzeba aktualizować)
   const [profileImage, setProfileImage] = useState(null);
   const [userName, setUserName] = useState(userData.name || '');
   const [userSurname, setUserSurname] = useState(userData.surname || '');
@@ -29,30 +33,30 @@ export const EditProfileForm = () => {
 
   const [workExperienceData, setWorkExperienceData] = useState({
     position: '',
-    companyName: '',
-    startDate: '',
-    endDate: '',
-    isOngoing: false,
+    company_id: '',
+    company_name: '',
+    workDate_Start: '',
+    workDate_End: '',
   });
 
   const [educationData, setEducationData] = useState({
-    schoolName: '',
-    location: '',
-    educationLevel: '',
-    fieldOfStudy: '',
-    startDate: '',
-    endDate: '',
-    shoolWebside: '',
+    school_name: '',
+    country: '',
+    education_level: '',
+    direction: '',
+    education_dateStart: '',
+    education_dateEnd: '',
+    school_webside: '',
     isOngoing: false,
   });
 
   const [languageData, setLanguageData] = useState({
-    language: '',
-    level: '',
+    language_name: '',
+    language_level: '',
   });
 
   const [skillData, setSkillData] = useState({
-    skillName: '',
+    skill_name: '',
   });
 
   const [courseData, setCourseData] = useState({
@@ -63,8 +67,8 @@ export const EditProfileForm = () => {
   });
 
   const [linkData, setLinkData] = useState({
-    platformName: '',
-    source: '',
+    link_name: '',
+    link_source: '',
   });
 
   useEffect(() => {
@@ -89,11 +93,10 @@ export const EditProfileForm = () => {
 
     setWorkExperienceData({
       position: '',
-      companyName: '',
-      location: '',
-      startDate: '',
-      endDate: '',
-      isOngoing: false,
+      company_id: '',
+      company_name: '',
+      workDate_Start: '',
+      workDate_End: '',
     });
   };
 
@@ -102,12 +105,13 @@ export const EditProfileForm = () => {
     setEducationList([...educationList, newEducation]);
 
     setEducationData({
-      schoolName: '',
-      location: '',
-      educationLevel: '',
-      fieldOfStudy: '',
-      startDate: '',
-      endDate: '',
+      school_name: '',
+      country: '',
+      education_level: '',
+      direction: '',
+      education_dateStart: '',
+      education_dateEnd: '',
+      school_webside: '',
       isOngoing: false,
     });
   };
@@ -117,18 +121,17 @@ export const EditProfileForm = () => {
     setLanguagenList([...languageList, newLaunguage]);
 
     setLanguageData({
-      language: '',
-      level: '',
+      language_name: '',
+      language_level: '',
     });
   };
 
   const handleAddSkill = () => {
-    const newSkill = { ...skillData };
-    setSkillsList([...skillsList, newSkill]);
-
-    setSkillData({
-      skillName: '',
-    });
+    if (skillData.skill_name.trim() !== '') {
+      const newSkill = { ...skillData };
+      setSkillsList([...skillsList, newSkill]);
+      setSkillData({ skill_name: '' });
+    }
   };
 
   const handleAddLink = () => {
@@ -136,8 +139,8 @@ export const EditProfileForm = () => {
     setlinkList([...linkList, newLink]);
 
     setLinkData({
-      platformName: '',
-      source: '',
+      link_name: '',
+      link_source: '',
     });
   };
 
@@ -160,14 +163,14 @@ export const EditProfileForm = () => {
   const handleDisableEndDateWorkInput = () => {
     setNewDisableDateWorkCheckBox(!newDisableDateWorkCheckbox);
     if (newDisableDateWorkCheckbox) {
-      setWorkExperienceData({ ...workExperienceData, endDate: '' });
+      setWorkExperienceData({ ...workExperienceData, workDate_End: '' });
     }
   };
 
   const handleDisableEndDateEducationInput = () => {
     setNewDisableDateEducationCheckBox(!newDisableDateEducationCheckbox);
     if (newDisableDateEducationCheckbox) {
-      setEducationData({ ...educationData, endDate: '' });
+      setEducationData({ ...educationData, education_dateEnd: '' });
     }
   };
 
@@ -214,6 +217,43 @@ export const EditProfileForm = () => {
     setlinkList(updatedLinkList);
   };
 
+  const advacedData_url = 'http://localhost/stronaZOfertamiPracy/getUserAdvancedData.php';
+
+  const sendUserId = async user_id => {
+    let UserData = new FormData();
+    UserData.append('user_id', user_id);
+
+    try {
+      const response = await axios.post(advacedData_url, UserData);
+
+      console.log(response.data);
+
+      if (response.data.status === 'success') {
+        //console.log(response.data);
+        //console.log('siema if in try');
+        setSkillsList(response.data.skill_data);
+        setWorkExperienceList(response.data.workExpData);
+        setEducationList(response.data.educationData);
+        setLanguagenList(response.data.languageData);
+        setlinkList(response.data.linkData);
+
+        //console.log()
+      } else if (response.data.error) {
+        console.log('error', response.data.error);
+      }
+    } catch (error) {
+      console.error('Error during fetched:', error);
+    }
+  };
+
+  useEffect(() => {
+    sendUserId(userData.user_id);
+  }, []);
+
+  const handleCheckSkillsList = () => {
+    //  if()
+  };
+
   const handleUpdateUserProfile = async (e, userId) => {
     e.preventDefault();
 
@@ -249,9 +289,9 @@ export const EditProfileForm = () => {
 
     try {
       const response = await axios.post(updateUserUrl, userUpdateData);
-      console.log(skillsList);
-      console.log(workExperienceList);
-      console.log(JSON.stringify(skillsList));
+      //console.log(skillsList);
+      //console.log(workExperienceList);
+      //console.log(JSON.stringify(skillsList));
 
       if (response.data.success) {
         console.log('sukces');
@@ -333,13 +373,23 @@ export const EditProfileForm = () => {
 
                     <Form.Label>Firma</Form.Label>
                     <Form.Select
-                      value={workExperienceData.companyName}
-                      onChange={e => setWorkExperienceData({ ...workExperienceData, companyName: e.target.value })}>
+                      value={workExperienceData.company_id}
+                      onChange={e => {
+                        const selectedCompany = companyData.find(comp => comp.company_id === e.target.value);
+                        setWorkExperienceData({
+                          ...workExperienceData,
+                          company_id: e.target.value,
+                          company_name: selectedCompany.company_name,
+                        });
+                      }}>
                       <option disabled selected>
                         Wybierz firmę
                       </option>
                       {companyData.map(comp => (
-                        <option value={comp.company_id}>{comp.company_name}</option>
+                        <option value={comp.company_id}>
+                          {comp.company_name}
+                          {comp.company_id}
+                        </option>
                       ))}
                     </Form.Select>
                     <p style={{ fontSize: '10px' }}>
@@ -355,15 +405,19 @@ export const EditProfileForm = () => {
                         <Col>
                           <Form.Control
                             type='date'
-                            value={workExperienceData.startDate}
-                            onChange={e => setWorkExperienceData({ ...workExperienceData, startDate: e.target.value })}
+                            value={workExperienceData.workDate_Start}
+                            onChange={e =>
+                              setWorkExperienceData({ ...workExperienceData, workDate_Start: e.target.value })
+                            }
                           />
                         </Col>
                         <Col>
                           <Form.Control
                             type='date'
-                            value={workExperienceData.endDate}
-                            onChange={e => setWorkExperienceData({ ...workExperienceData, endDate: e.target.value })}
+                            value={workExperienceData.workDate_End}
+                            onChange={e =>
+                              setWorkExperienceData({ ...workExperienceData, workDate_End: e.target.value })
+                            }
                             disabled={newDisableDateWorkCheckbox ? true : false}
                           />
                         </Col>
@@ -390,19 +444,20 @@ export const EditProfileForm = () => {
                     <Form.Label>Nazwa szkoły/uczelni</Form.Label>
                     <Form.Control
                       type='text'
-                      value={educationData.schoolName}
-                      onChange={e => setEducationData({ ...educationData, schoolName: e.target.value })}
+                      value={educationData.school_name}
+                      onChange={e => setEducationData({ ...educationData, school_name: e.target.value })}
                     />
 
                     <Form.Label>Miejscowość</Form.Label>
                     <Form.Control
                       type='text'
-                      value={educationData.location}
-                      onChange={e => setEducationData({ ...educationData, location: e.target.value })}
+                      value={educationData.country}
+                      onChange={e => setEducationData({ ...educationData, country: e.target.value })}
                     />
 
                     <Form.Label>Poziom wykształcenia</Form.Label>
-                    <Form.Select onChange={e => setEducationData({ ...educationData, educationLevel: e.target.value })}>
+                    <Form.Select
+                      onChange={e => setEducationData({ ...educationData, education_level: e.target.value })}>
                       <option value='wykształcenie podstawowe'>wykształcenie podstawowe</option>
                       <option value='wykształcenie gimnazjalne'>wykształcenie gimnazjalne</option>
                       <option value='wykształcenie zasadnicze zawodowe'>wykształcenie zasadnicze zawodowe</option>
@@ -416,15 +471,15 @@ export const EditProfileForm = () => {
                     <Form.Label>Kierunek</Form.Label>
                     <Form.Control
                       type='text'
-                      value={educationData.fieldOfStudy}
-                      onChange={e => setEducationData({ ...educationData, fieldOfStudy: e.target.value })}
+                      value={educationData.direction}
+                      onChange={e => setEducationData({ ...educationData, direction: e.target.value })}
                     />
 
                     <Form.Label>Strona twojej szkoły</Form.Label>
                     <Form.Control
                       type='text'
-                      value={educationData.shoolWebside}
-                      onChange={e => setEducationData({ ...educationData, shoolWebside: e.target.value })}
+                      value={educationData.school_webside}
+                      onChange={e => setEducationData({ ...educationData, school_webside: e.target.value })}
                     />
 
                     <Container fluid>
@@ -435,15 +490,15 @@ export const EditProfileForm = () => {
                         <Col>
                           <Form.Control
                             type='date'
-                            value={educationData.startDate}
-                            onChange={e => setEducationData({ ...educationData, startDate: e.target.value })}
+                            value={educationData.education_dateStart}
+                            onChange={e => setEducationData({ ...educationData, education_dateStart: e.target.value })}
                           />
                         </Col>
                         <Col>
                           <Form.Control
                             type='date'
-                            value={educationData.endDate}
-                            onChange={e => setEducationData({ ...educationData, endDate: e.target.value })}
+                            value={educationData.education_dateEnd}
+                            onChange={e => setEducationData({ ...educationData, education_dateEnd: e.target.value })}
                             disabled={newDisableDateEducationCheckbox ? true : false}
                           />
                         </Col>
@@ -470,11 +525,11 @@ export const EditProfileForm = () => {
                     <Container fluid>
                       <Form.Control
                         placeholder='Język'
-                        value={languageData.language}
-                        onChange={e => setLanguageData({ ...languageData, language: e.target.value })}
+                        value={languageData.language_name}
+                        onChange={e => setLanguageData({ ...languageData, language_name: e.target.value })}
                       />
                       <Form.Label>Poziom</Form.Label>
-                      <Form.Select onChange={e => setLanguageData({ ...languageData, level: e.target.value })}>
+                      <Form.Select onChange={e => setLanguageData({ ...languageData, language_level: e.target.value })}>
                         <option value='A1'>Początkujący (A1)</option>
                         <option value='A2'>Podstawowy (A2)</option>
                         <option value='B1'>Średnio zaawansowany (B1)</option>
@@ -498,8 +553,8 @@ export const EditProfileForm = () => {
                     <Container>
                       <Form.Control
                         type='text'
-                        value={skillData.skillName}
-                        onChange={e => setSkillData({ ...skillData, skillName: e.target.value })}
+                        value={skillData.skill_name}
+                        onChange={e => setSkillData({ ...skillData, skill_name: e.target.value })}
                       />
                     </Container>
                     <Button onClick={handleAddSkill}>Dodaj</Button>
@@ -565,16 +620,16 @@ export const EditProfileForm = () => {
                           <Form.Label>Nazwa platformy</Form.Label>
                           <Form.Control
                             type='text'
-                            value={linkData.platformName}
-                            onChange={e => setLinkData({ ...linkData, platformName: e.target.value })}
+                            value={linkData.link_name}
+                            onChange={e => setLinkData({ ...linkData, link_name: e.target.value })}
                           />
                         </Col>
                         <Col>
                           <Form.Label>Link</Form.Label>
                           <Form.Control
                             type='text'
-                            value={linkData.source}
-                            onChange={e => setLinkData({ ...linkData, source: e.target.value })}
+                            value={linkData.link_source}
+                            onChange={e => setLinkData({ ...linkData, link_source: e.target.value })}
                           />
                         </Col>
                       </Row>
@@ -601,8 +656,8 @@ export const EditProfileForm = () => {
             <ul>
               {workExperienceList.map((experience, index) => (
                 <li key={index}>
-                  {experience.position} at {experience.companyName} ({experience.startDate} -{' '}
-                  {experience.endDate || (experience.isOngoing && 'Trwa nadal')})<span> </span>
+                  {experience.position} at {experience.company_name} ({experience.workDate_Start} -{' '}
+                  {experience.workDate_End || (experience.isOngoing && 'Trwa nadal')})<span> </span>
                   <Button onClick={() => handleRemoveWorkExperience(index)}>Usuń</Button>
                 </li>
               ))}
@@ -614,8 +669,9 @@ export const EditProfileForm = () => {
             <ul>
               {educationList.map((education, index) => (
                 <li key={index}>
-                  {education.educationLevel} in {education.fieldOfStudy} at {education.schoolName} (
-                  {education.startDate} - {education.endDate || (education.isOngoing && 'Trwa nadal')})<span> </span>
+                  <strong>{education.education_level}</strong>. Profil <strong>{education.direction}</strong> w{' '}
+                  {education.school_name} ({education.education_dateStart} -{' '}
+                  {education.education_dateEnd || (education.isOngoing && 'Trwa nadal')})<span> </span>
                   <Button onClick={() => handleRemoveEducation(index)}>Usuń</Button>
                 </li>
               ))}
@@ -627,7 +683,7 @@ export const EditProfileForm = () => {
             <ul>
               {languageList.map((language, index) => (
                 <li key={index}>
-                  Name: {language.language} level: {language.level}
+                  Name: {language.language_name} level: {language.language_level}
                   <span> </span>
                   <Button onClick={() => handleRemoveLanguage(index)}>Usuń</Button>
                 </li>
@@ -640,7 +696,7 @@ export const EditProfileForm = () => {
             <ul>
               {skillsList.map((skills, index) => (
                 <li key={index}>
-                  Name: {skills.skillName}
+                  Name: {skills.skill_name}
                   <span> </span>
                   <Button onClick={() => handleRemoveSkill(index)}>Usuń</Button>
                 </li>
@@ -667,10 +723,10 @@ export const EditProfileForm = () => {
             <ul>
               {linkList.map((link, index) => (
                 <li key={index}>
-                  Platforma: {link.platformName} <br />
+                  Platforma: {link.link_name} <br />
                   Link:{' '}
-                  <a href={link.source} target='blank'>
-                    {link.source}
+                  <a href={link.link_source} target='_blank'>
+                    {link.link_source}
                   </a>
                   <span> </span>
                   <Button onClick={() => handleRemoveLink(index)}>Usuń</Button>

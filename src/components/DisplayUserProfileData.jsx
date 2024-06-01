@@ -11,6 +11,8 @@ export const DisplayUserProfileData = () => {
   const [userSkills, setUserSkills] = useState([]);
   const [userWorkExp, setUserWorkExp] = useState([]);
   const [userEducation, setUserEducation] = useState([]);
+  const [userLanguage, setUserLanguage] = useState([]);
+  const [userLinks, setUserLinks] = useState([]);
   const [userProfImg, setUserProfImg] = useState(null);
 
   useEffect(() => {
@@ -35,7 +37,7 @@ export const DisplayUserProfileData = () => {
     try {
       const response = await axios.post(advacedData_url, UserData);
 
-      console.log(response.data);
+      //console.log(response.data);
 
       if (response.data.status === 'success') {
         //console.log(response.data);
@@ -43,8 +45,12 @@ export const DisplayUserProfileData = () => {
         setUserSkills(response.data.skill_data);
         setUserWorkExp(response.data.workExpData);
         setUserEducation(response.data.educationData);
+        setUserLanguage(response.data.languageData);
+        setUserLinks(response.data.linkData);
 
         setUserProfImg(response.data.profileImgData);
+
+        //console.log()
       } else if (response.data.error) {
         console.log('error', response.data.error);
       }
@@ -58,8 +64,9 @@ export const DisplayUserProfileData = () => {
   }, []);
 
   const handeCheckUserProfileImage = () => {
-    if (userProfImg != null) {
-      return `data:image/jpeg;base64, ${userProfImg}`;
+    //console.log(userProfImg);
+    if (userProfImg != null && userProfImg.length > 0) {
+      return `data:image/jpeg;base64,${userProfImg}`;
     } else {
       return defaultPicture;
     }
@@ -78,7 +85,7 @@ export const DisplayUserProfileData = () => {
                 <img
                   src={handeCheckUserProfileImage()}
                   alt='obraz profilowy uzytkownka'
-                  style={{ float: 'right', width: '200px', borderRadius: '50%' }}
+                  style={{ float: 'right', width: '150px', borderRadius: '50%' }}
                 />
               </p>
             </CardTitle>
@@ -184,12 +191,12 @@ export const DisplayUserProfileData = () => {
                   <CardText>
                     {userEducation.length > 0 ? (
                       <ul>
-                        {userEducation.map(data => (
-                          <li key={data.school_name}>
+                        {userEducation.map((data, index) => (
+                          <li key={data.index}>
                             {data.education_dateEnd !== null ? (
                               <>
                                 <p>
-                                  Uczył się w: {data.education_level} w {data.country}
+                                  {data.education_level} w {data.country}
                                 </p>
                                 <p>Kierunek: {data.direction}</p>
                                 <p>
@@ -239,8 +246,8 @@ export const DisplayUserProfileData = () => {
                     <>
                       {userSkills.length > 0 ? (
                         <ul>
-                          {userSkills.map(data => (
-                            <li key={data.skill_name}>{data.skill_name}</li>
+                          {userSkills.map((data, index) => (
+                            <li key={data.index}>{data.skill_name}</li>
                           ))}
                         </ul>
                       ) : (
@@ -259,6 +266,64 @@ export const DisplayUserProfileData = () => {
                   </CardTitle>
                   <CardText>
                     <p>{userData.certifications}</p>
+                  </CardText>
+                </CardBody>
+              </Card>
+            </Col>
+          </Row>
+          <Row>
+            <Col md={6}>
+              <Card style={{ border: 'none' }}>
+                <CardBody>
+                  <CardTitle>
+                    <h2>Language Skills</h2>
+                  </CardTitle>
+                  <CardText>
+                    <>
+                      {userSkills.length > 0 ? (
+                        <>
+                          {userLanguage.map((data, index) => (
+                            <p>
+                              {' '}
+                              <span key={data.index}>
+                                {data.language_name}, na poziomie {data.language_level}
+                              </span>
+                            </p>
+                          ))}
+                        </>
+                      ) : (
+                        <p>Użytkownik nie posiada zdefiniowanych umiejętności</p>
+                      )}
+                    </>
+                  </CardText>
+                </CardBody>
+              </Card>
+            </Col>
+            <Col md={6}>
+              <Card style={{ border: 'none' }}>
+                <CardBody>
+                  <CardTitle>
+                    <h2>Linki</h2>
+                  </CardTitle>
+                  <CardText>
+                    <>
+                      {userSkills.length > 0 ? (
+                        <>
+                          {userLinks.map((data, index) => (
+                            <p>
+                              {' '}
+                              <span key={data.index}>
+                                <a href={data.link_source} target='_blank' rel='noopener noreferrer'>
+                                  {data.link_name}
+                                </a>{' '}
+                              </span>
+                            </p>
+                          ))}
+                        </>
+                      ) : (
+                        <p>Użytkownik nie posiada zdefiniowanych umiejętności</p>
+                      )}
+                    </>
                   </CardText>
                 </CardBody>
               </Card>
