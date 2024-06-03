@@ -58,12 +58,11 @@ export const MainPage = () => {
 
   return (
     <>
-      <Container style={{ padding: '20px', borderRadius: '20px', backgroundColor: '' }}>
+      <Container style={{ padding: '20px', borderRadius: '20px', backgroundColor: 'white' }}>
         <Row className='mt-5' style={{ textAlign: 'center' }}>
           <Col>
             <h1 style={{ fontSize: '60px', color: '#333', fontWeight: 'bold' }}>Easy Work</h1>
-            <h3 style={{ marginTop: '-50px', color: '#666', fontStyle: 'italic' }}>Twój plan na przyszłość</h3>
-            <h3 style={{ color: '#666', fontStyle: 'italic' }}>
+            <h3 style={{ color: '#666', marginTop: '-50px', fontStyle: 'italic' }}>
               {notificationsList.length} ofert od najlepszych pracodawców
             </h3>
           </Col>

@@ -13,6 +13,8 @@ import { NotificationPage } from './Pages/NotificationPage.jsx';
 import { YourNotificationsPage } from './Pages/YourNotificationsPage.jsx';
 import { UserApplicationsPage } from './Pages/userApplicationsPage.jsx';
 import { CompanyPage } from './Pages/CompanyPage.jsx';
+import { CompanyProfilesSearch } from './Pages/CompanyProfilesSearch.jsx';
+import { AdminPage } from './Pages/AdminPage.jsx';
 
 function App() {
   return (
@@ -32,6 +34,8 @@ function App() {
             <Route path='/your-notification-page' element={<YourNotificationsPage />} />
             <Route path='/your-applications-page' element={<UserApplicationsPage />} />
             <Route path='/company-page' element={<CompanyPage />} />
+            <Route path='/employer-profiles' element={<CompanyProfilesSearch />} />
+            <Route path='/admin-page' element={<AdminPage />} />
           </Routes>
         </UserProvider>
       </Router>

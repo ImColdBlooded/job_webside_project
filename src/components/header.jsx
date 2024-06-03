@@ -5,7 +5,7 @@ import { useUserContext } from '../ContextApi/userData';
 import { useNavigate } from 'react-router-dom';
 
 export const Header = () => {
-  const { isLogged, logOut, loginUser } = useUserContext();
+  const { userData, isLogged, logOut, loginUser } = useUserContext();
   var navigate = useNavigate();
 
   useEffect(() => {
@@ -70,6 +70,7 @@ export const Header = () => {
                   <NavDropdown.Item as={Link} to='/your-applications-page'>
                     Twoje aplikacje
                   </NavDropdown.Item>
+
                   <NavDropdown.Item onClick={handleLogout}>Wyloguj</NavDropdown.Item>
                 </NavDropdown>
               ) : (
@@ -78,6 +79,15 @@ export const Header = () => {
                     Logowanie
                   </Nav.Link>
                 </Nav.Item>
+              )}
+              {userData.isAdmin === '1' ? (
+                <Nav.Item>
+                  <Nav.Link as={Link} to='/admin-page'>
+                    Strona Administratorska
+                  </Nav.Link>
+                </Nav.Item>
+              ) : (
+                <></>
               )}
             </Nav>
           </Navbar.Collapse>

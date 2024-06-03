@@ -87,7 +87,12 @@ export const DisplayUserProfileData = () => {
                 <img
                   src={handeCheckUserProfileImage()}
                   alt='obraz profilowy uzytkownka'
-                  style={{ float: 'right', width: '150px', borderRadius: '50%' }}
+                  style={{
+                    borderRadius: '50%',
+                    float: 'right',
+                    maxWidth: '150px',
+                    maxHeight: '150px',
+                  }}
                 />
               </p>
             </CardTitle>

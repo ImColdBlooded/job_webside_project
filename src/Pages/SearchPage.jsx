@@ -221,7 +221,6 @@ export const SearchPage = () => {
                   Wynagrodzenie: {data.salary_range_start} zł - {data.salary_range_end} zł
                 </p>
                 <p>Typ umowy: {data.contract_type}</p>
-                <p>{data.notification_of_work_id}</p>
               </Card.Text>
             </Card.Body>
           </Card>

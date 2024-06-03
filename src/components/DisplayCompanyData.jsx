@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Container, Row, Col, Card, Table } from 'react-bootstrap';
+import { Container, Row, Col, Card, Table, Button } from 'react-bootstrap';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 
 export const DisplayCompanyData = ({ data }) => {
   const [companies, setCompanies] = useState([]);
+  const [companyNot, setCompanyNot] = useState([]);
 
   const advacedData_url = 'http://localhost/stronaZOfertamiPracy/getCompanyById.php';
+  const advacedCompNotData_url = 'http://localhost/stronaZOfertamiPracy/getNotificationByCompanyId.php';
 
-  const sendUserId = async comp_id => {
+  const getCompanyData = async comp_id => {
     let companyData = new FormData();
     companyData.append('company_id', comp_id);
 
@@ -16,7 +18,7 @@ export const DisplayCompanyData = ({ data }) => {
       const response = await axios.post(advacedData_url, companyData);
 
       if (response.data.success) {
-        console.log('Received company data:', response.data.companyData);
+        //console.log('Received company data:', response.data.companyData);
         setCompanies(response.data.companyData);
       } else if (response.data.error) {
         console.log('error', response.data.error);
@@ -26,12 +28,31 @@ export const DisplayCompanyData = ({ data }) => {
     }
   };
 
+  const getCompanyNotData = async comp_id => {
+    let companyData = new FormData();
+    companyData.append('company_id', comp_id);
+
+    try {
+      const response = await axios.post(advacedCompNotData_url, companyData);
+
+      if (response.data.status === 'success') {
+        //console.log('Received company data:', response.data.companyData);
+        setCompanyNot(response.data.not_data);
+      } else if (response.data.error) {
+        console.log('error', response.data.error);
+      }
+    } catch (error) {
+      console.error('Error during fetched:', error);
+    }
+  };
+
   useEffect(() => {
-    sendUserId(data);
+    getCompanyData(data);
+    getCompanyNotData(data);
   }, [data]);
 
   if (companies.length === 0) {
-    return <p>Loading...</p>; // or any loading indicator
+    return <p>Loading...</p>;
   }
 
   return (
@@ -48,6 +69,11 @@ export const DisplayCompanyData = ({ data }) => {
               <Card.Body>
                 <Card.Title>{companies[0].company_name}</Card.Title>
                 <Card.Text>Adres: {companies[0].company_address}</Card.Text>
+                <Row>
+                  <Col>
+                    <Button>Obserwuj</Button>
+                  </Col>
+                </Row>
               </Card.Body>
             </Card>
           )}
@@ -57,27 +83,27 @@ export const DisplayCompanyData = ({ data }) => {
             <>
               <h2>{companies[0].company_name}</h2>
               <p>{companies[0].about_company}</p>
-              <h2>Jobs</h2>
+              <h2>Ostatnio dodane przez nas ogłoszenia</h2>
               <Table striped bordered hover>
                 <thead>
                   <tr>
-                    <th>Job Title</th>
-                    <th>Location</th>
-                    <th>Posted</th>
+                    <th>Tytuł</th>
+                    <th>Pozycja</th>
+                    <th>Data dodania</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {companies.map(company => (
-                    <tr key={company.company_id}>
-                      <td>{company.job_title}</td>
-                      <td>{company.job_location}</td>
-                      <td>{company.job_posted}</td>
+                  {companyNot.map((compNot, index) => (
+                    <tr key={index}>
+                      <td>{compNot.notification_title}</td>
+                      <td>{compNot.work_position}</td>
+                      <td>{compNot.date_of_expiry_start}</td>
                     </tr>
                   ))}
                 </tbody>
               </Table>
               <MapContainer
-                center={[parseFloat(companies[0].lng), parseFloat(companies[0].lat)]}
+                center={[parseFloat(companies[0].lat), parseFloat(companies[0].lng)]}
                 zoom={10}
                 style={{ height: '400px', width: '100%' }}>
                 <TileLayer

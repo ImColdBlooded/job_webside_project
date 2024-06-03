@@ -97,6 +97,8 @@ export const DisplayNotificationData = ({ data }) => {
   const checkUserApplication = async () => {
     const checkAplicationUrl = 'http://localhost/stronaZOfertamiPracy/checkApplication.php';
 
+    console.log(isLogged);
+
     const checkAplicationData = new FormData();
     checkAplicationData.append('not_id', notificationId);
     checkAplicationData.append('user_id', userData.user_id);
@@ -129,6 +131,25 @@ export const DisplayNotificationData = ({ data }) => {
       if (response.data.status === 'success') {
         setSelectedData(response.data.not_data);
         //  console.log(JSON.stringify(response.data.not_data));
+      } else if (response.data.status === 'error') {
+        console.error('Error:' + response.data.message);
+      }
+    } catch (error) {
+      console.error('Error during select notification', error);
+    }
+  };
+
+  const handleAddToFollowed = async (not_id, user_id) => {
+    const addToFolloweUrl = '';
+
+    const notId = new FormData();
+    notId.append('not_id', not_id);
+    notId.append('user_id', user_id);
+
+    try {
+      const response = await axios.post(addToFolloweUrl, notId);
+
+      if (response.data.status === 'success') {
       } else if (response.data.status === 'error') {
         console.error('Error:' + response.data.message);
       }
@@ -197,19 +218,27 @@ export const DisplayNotificationData = ({ data }) => {
                     <></>
                   ) : (
                     <>
-                      {buttonInformation.state ? (
-                        <Button className='primary' onClick={handleAddToYourApplications}>
-                          Aplikuj
-                        </Button>
-                      ) : (
+                      {isLogged ? (
                         <>
-                          <Button className='primary' onClick={handleDeleteFromYourApplications}>
-                            Zakończ aplikację
+                          {buttonInformation.state ? (
+                            <Button className='primary' onClick={handleAddToYourApplications}>
+                              Aplikuj
+                            </Button>
+                          ) : (
+                            <>
+                              <Button className='primary' onClick={handleDeleteFromYourApplications}>
+                                Zakończ aplikację
+                              </Button>
+                            </>
+                          )}
+
+                          <Button className='primary' onClick={() => handleAddToFollowed}>
+                            Dodaj do ulubionych
                           </Button>
                         </>
+                      ) : (
+                        <></>
                       )}
-
-                      <Button className='primary'>Dodaj do ulubionych</Button>
                     </>
                   )}
                 </Col>

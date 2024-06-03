@@ -10,25 +10,6 @@ export const UserProfile = () => {
   const { userData, isLogged, loginUser } = useUserContext();
   const [editProfile, setEditProfile] = useState(true);
 
-  function checkAdmin(userData) {
-    if (userData === '1') {
-      return (
-        <Stack gap={2}>
-          <AdminControls />
-          <br />
-        </Stack>
-      );
-    }
-    return 'false';
-  }
-
-  function checkVisibility(userData) {
-    if (userData === '1') {
-      return { visibility: 'visible' };
-    }
-    return { visibility: 'hidden' };
-  }
-
   const handleChangeUserData = () => {
     setEditProfile(prevEditProfile => !prevEditProfile);
   };
@@ -53,11 +34,6 @@ export const UserProfile = () => {
                 </Button>
               </Container>
             )}
-
-            <br />
-            <Container className='adminDisplay' style={checkVisibility(userData.isAdmin)}>
-              {checkAdmin(userData.isAdmin)}
-            </Container>
           </Container>
         </>
       ) : (
